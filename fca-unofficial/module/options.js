@@ -1,5 +1,6 @@
 const { getType } = require("../src/utils/format");
 const { setProxy } = require("../src/utils/request");
+const { getRandomUserAgent } = require("../src/utils/userAgent");
 const logger = require("../func/logger");
 const Boolean_Option = [
   "online",
@@ -22,7 +23,7 @@ function setOptions(globalOptions, options) {
     }
     switch (key) {
       case "userAgent": {
-        globalOptions.userAgent = options.userAgent || "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36";
+        globalOptions.userAgent = options.userAgent || getRandomUserAgent();
         break;
       }
       case "logLevel":

@@ -1,5 +1,6 @@
 const { getType } = require("../src/utils/format");
 const { setOptions } = require("./options");
+const { getRandomUserAgent } = require("../src/utils/userAgent");
 const { loadConfig } = require("./config");
 const { checkAndUpdateVersion } = require("../func/checkUpdate");
 const loginHelper = require("./loginHelper");
@@ -98,7 +99,7 @@ function login(loginData, options, callback) {
     autoReconnect: true,
     online: true,
     emitReady: false,
-    userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"
+    userAgent: getRandomUserAgent()
   };
   setOptions(globalOptions, options);
   let prCallback = null;
