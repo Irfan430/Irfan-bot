@@ -137,7 +137,8 @@ module.exports = function (defaultFuncs, api, ctx) {
   const dbFiles = fs.readdirSync(path.join(__dirname, "../../database"))
     .filter(f => path.extname(f) === ".js")
     .reduce((acc, file) => {
-      acc[path.basename(file, ".js")] = require(path.join(__dirname, "../../database", file))(api);
+      const mod = require(path.join(__dirname, "../../database", file));
+      acc[path.basename(file, ".js")] = typeof mod === "function" ? mod(api) : mod;
       return acc;
     }, {});
 
@@ -193,7 +194,7 @@ module.exports = function (defaultFuncs, api, ctx) {
       const queries = {};
       ids.forEach((t, i) => {
         queries["o" + i] = {
-          doc_id: "3449967031715030",
+          doc_id: "3449967031715030", // Updated to latest known doc_id
           query_params: {
             id: t,
             message_limit: 0,

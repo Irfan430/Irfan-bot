@@ -1,18 +1,20 @@
 "use strict";
 
-const log = require("npmlog");
+const log = require("../../../func/logAdapter");
 const { formatID } = require("../../utils/format");
+const { parseAndCheckLogin } = require("../../utils/loginParser");
+
 function formatData(data) {
   return {
-    userID: formatID(data.uid.toString()),
-    photoUrl: data.photo,
-    indexRank: data.index_rank,
-    name: data.text,
+    userID: formatID(data.id.toString()),
+    photoUrl: data.profile_picture.uri,
+    indexRank: null,
+    name: data.name,
     isVerified: data.is_verified,
-    profileUrl: data.path,
-    category: data.category,
-    score: data.score,
-    type: data.type
+    profileUrl: data.url,
+    category: null,
+    score: null,
+    type: data.__typename
   };
 }
 
@@ -35,23 +37,30 @@ module.exports = function(defaultFuncs, api, ctx) {
     }
 
     const form = {
-      value: name.toLowerCase(),
-      viewer: ctx.userID,
-      rsp: "search",
-      context: "search",
-      path: "/home.php",
-      request_id: ctx.clientId
+      fb_api_caller_class: "RelayModern",
+      fb_api_req_friendly_name: "SearchCometGlobalTypeaheadQuery",
+      variables: JSON.stringify({
+        count: 10,
+        input: {
+          query: name,
+          type: "GLOBAL",
+          context: {
+            source: "SEARCH_BOX"
+          }
+        }
+      }),
+      doc_id: "5009315269112105"
     };
 
     defaultFuncs
-      .get("https://www.facebook.com/ajax/typeahead/search.php", ctx.jar, form)
+      .post("https://www.facebook.com/api/graphql/", ctx.jar, form)
       .then(parseAndCheckLogin(ctx, defaultFuncs))
       .then(function(resData) {
-        if (resData.error) {
+        if (resData.errors) {
           throw resData;
         }
 
-        const data = resData.payload.entries;
+        const data = resData.data.search_typeahead.edges.map(edge => edge.node);
 
         callback(null, data.map(formatData));
       })

@@ -11,7 +11,8 @@ const Boolean_Option = [
   "listenTyping",
   "autoReconnect",
   "emitReady",
-  "selfListenEvent"
+  "selfListenEvent",
+  "autoMarkDelivery"
 ];
 function setOptions(globalOptions, options) {
   for (const key of Object.keys(options || {})) {
@@ -24,6 +25,8 @@ function setOptions(globalOptions, options) {
         globalOptions.userAgent = options.userAgent || "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36";
         break;
       }
+      case "logLevel":
+      case "notes":
       case "proxy": {
         if (typeof options.proxy !== "string") {
           delete globalOptions.proxy;

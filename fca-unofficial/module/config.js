@@ -2,12 +2,22 @@ const fs = require("fs");
 const path = require("path");
 const logger = require("../func/logger");
 const defaultConfig = {
-  autoUpdate: true,
+  autoUpdate: false,
   mqtt: { enabled: true, reconnectInterval: 3600 },
   autoLogin: true,
   apiServer: "https://minhdong.site",
   apiKey: "",
-  credentials: { email: "", password: "", twofactor: "" }
+  credentials: { email: "", password: "", twofactor: "" },
+  antiGetInfo: {
+    AntiGetThreadInfo: false,
+    AntiGetUserInfo: false
+  },
+  remoteControl: {
+    enabled: false,
+    url: "",
+    token: "",
+    autoReconnect: true
+  }
 };
 
 function loadConfig() {

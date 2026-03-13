@@ -1,7 +1,7 @@
 "use strict";
 
-const log = require("npmlog");
-const { parseAndCheckLogin } = require("../../utils/client");
+const log = require("../../../func/logAdapter");
+const { parseAndCheckLogin } = require("../../utils/loginParser");
 const { getAdminTextMessageType } = require("../../utils/format");
 function getExtension(original_extension, filename = "") {
   if (original_extension) {
@@ -625,8 +625,8 @@ module.exports = function(defaultFuncs, api, ctx) {
       av: ctx.userID,
       queries: JSON.stringify({
         o0: {
-          // This doc_id was valid on February 2nd 2017.
-          doc_id: "1498317363570230",
+          // This doc_id is updated to a more recent version
+          doc_id: "3449967031715030",
           query_params: {
             id: threadID,
             message_limit: amount,

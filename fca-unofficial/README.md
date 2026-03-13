@@ -4,12 +4,7 @@
 
 **Unofficial Facebook Chat API for Node.js** - Interact with Facebook Messenger programmatically
 
-[![npm version](https://img.shields.io/npm/v/@dongdev/fca-unofficial.svg?style=for-the-badge)](https://www.npmjs.com/package/@dongdev/fca-unofficial)
-[![npm downloads](https://img.shields.io/npm/dm/@dongdev/fca-unofficial.svg?style=for-the-badge)](https://www.npmjs.com/package/@dongdev/fca-unofficial)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg?style=for-the-badge)](./LICENSE-MIT)
-[![Node.js](https://img.shields.io/badge/node-%3E%3D12.0.0-brightgreen.svg?style=for-the-badge)](https://nodejs.org/)
-
-[Features](#-features) • [Installation](#-installation) • [Quick Start](#-quick-start) • [Documentation](#-documentation) • [Support](#-support)
+[Features](#-features) • [Installation](#-installation) • [Quick Start](#-quick-start) • [Documentation](#-documentation) • [Support](#-author--support)
 
 </div>
 
@@ -17,13 +12,15 @@
 
 ## 📋 Table of Contents
 
-- [⚠️ Important Disclaimer](#️-important-disclaimer)
+- [⚠️ Disclaimer & Support Policy](#️-disclaimer--support-policy)
+- [⚡ Why this fork?](#-why-this-fork)
 - [✨ Features](#-features)
 - [🔍 Introduction](#-introduction)
 - [📦 Installation](#-installation)
 - [🚀 Quick Start](#-quick-start)
 - [📝 Message Types](#-message-types)
 - [💾 AppState Management](#-appstate-management)
+- [🔄 Auto Login](#-auto-login)
 - [👂 Listening for Messages](#-listening-for-messages)
 - [🎯 API Quick Reference](#-api-quick-reference)
 - [📚 Documentation](#-documentation)
@@ -34,29 +31,38 @@
 
 ---
 
-## ⚠️ Important Disclaimer
+## ⚠️ Disclaimer & Support Policy
 
 <div align="center">
 
-**⚠️ Use at your own risk! We are not responsible for account bans.**
+**READ THIS BEFORE USING OR OPENING AN ISSUE.**
 
 </div>
 
-**We are not responsible if your account gets banned for spammy activities such as:**
+This repository is provided **"AS IS"** and is entirely open-source. By using this project, you explicitly agree to the following terms:
 
-- ❌ Sending lots of messages to people you don't know
-- ❌ Sending messages very quickly
-- ❌ Sending spammy looking URLs
-- ❌ Logging in and out very quickly
+1. **Use at your own risk:** We are NOT responsible if your account gets banned for spammy activities (sending messages too fast, unsolicited mass messaging, suspicious URLs, or rapid login/logout).
+2. **No Spoon-Feeding:** This is a tool for developers. If you cannot read source code, navigate directories, or use basic search tools (`Ctrl + Shift + F`), you should not be using this library.
+3. **No Free Programming Lessons:** I maintain the core updates and security patches for the community for free. I do **not** provide free JavaScript/TypeScript tutorials, nor will I tell you exactly which line of code to edit for your specific bot.
+4. **Custom Features = Paid Service:** Brainpower and time are not free. If you need me to write custom logic, reverse-engineer specific endpoints, or provide 1-on-1 support for your personal project, **that is a paid service**.
 
-**💡 Recommendations:**
+If you don't like this policy, feel free to fork the repository and maintain it yourself.
 
-- Use **Firefox browser** or visit [fca.dongdev.id.vn](https://fca.dongdev.id.vn) to reduce logout issues (especially for iOS users)
-- Use **AppState** instead of credentials when possible
-- Implement **rate limiting** in your bots
-- Follow Facebook's Terms of Service
+**Recommendations to avoid bans:**
 
-**🆘 Support:** If you encounter errors, contact us [here](https://www.facebook.com/mdong.dev)
+- Use **Firefox** or the [fca.dongdev.id.vn](https://fca.dongdev.id.vn) flow to reduce logout issues (especially on iOS).
+- Prefer **AppState** over email/password when possible.
+- Use strict **rate limiting** in your bots.
+
+---
+
+## ⚡ Why this fork?
+
+Unlike other outdated forks, `@dongdev/fca-unofficial` is built with a focus on **real-world practicality and performance**:
+
+- **Performance First:** Stripped out legacy, redundant code that causes technical debt.
+- **Modernized Architecture:** Adapted to the latest Facebook backend structure.
+- **Clean Logic:** No messy wrappers. The codebase is straightforward and easy to navigate if you actually open the files.
 
 ---
 
@@ -76,13 +82,14 @@
 
 Facebook provides an [official API for chat bots](https://developers.facebook.com/docs/messenger-platform), but it's **only available for Facebook Pages**.
 
-`@dongdev/fca-unofficial` is the **only API** that allows you to automate chat functionalities on a **user account** by emulating the browser. This means:
+`@dongdev/fca-unofficial` is the API that allows you to automate chat functionalities on a **user account** by emulating the browser. This means:
 
 - 🔄 Making the exact same GET/POST requests as a browser
 - 🔐 Does not work with auth tokens
 - 📝 Requires Facebook account credentials (email/password) or AppState
 
 **Perfect for:**
+
 - 🤖 Building chatbots
 - 📱 Automating message responses
 - 🔔 Creating notification systems
@@ -98,6 +105,7 @@ npm install @dongdev/fca-unofficial@latest
 ```
 
 **Requirements:**
+
 - Node.js >= 12.0.0
 - Active Facebook account
 
@@ -111,14 +119,16 @@ npm install @dongdev/fca-unofficial@latest
 const login = require("@dongdev/fca-unofficial");
 
 login({ appState: [] }, (err, api) => {
+  if (err) return console.error(err);
+
+  api.listenMqtt((err, event) => {
     if (err) return console.error(err);
 
-    api.listenMqtt((err, event) => {
-        if (err) return console.error(err);
-
-        // Echo back the received message
-        api.sendMessage(event.body, event.threadID);
-    });
+    // Echo back the received message
+    if (event.type === "message") {
+      api.sendMessage(event.body, event.threadID);
+    }
+  });
 });
 ```
 
@@ -128,18 +138,18 @@ login({ appState: [] }, (err, api) => {
 const login = require("@dongdev/fca-unofficial");
 
 login({ appState: [] }, (err, api) => {
-    if (err) {
-        console.error("Login Error:", err);
-        return;
-    }
+  if (err) {
+    console.error("Login Error:", err);
+    return;
+  }
 
-    const yourID = "000000000000000"; // Replace with actual Facebook ID
-    const msg = "Hey! 👋";
+  const yourID = "000000000000000"; // Replace with actual Facebook ID
+  const msg = "Hey! 👋";
 
-    api.sendMessage(msg, yourID, err => {
-        if (err) console.error("Message Sending Error:", err);
-        else console.log("✅ Message sent successfully!");
-    });
+  api.sendMessage(msg, yourID, (err) => {
+    if (err) console.error("Message Sending Error:", err);
+    else console.log("✅ Message sent successfully!");
+  });
 });
 ```
 
@@ -152,29 +162,29 @@ const login = require("@dongdev/fca-unofficial");
 const fs = require("fs");
 
 login({ appState: [] }, (err, api) => {
-    if (err) {
-        console.error("Login Error:", err);
-        return;
-    }
+  if (err) {
+    console.error("Login Error:", err);
+    return;
+  }
 
-    const yourID = "000000000000000";
-    const imagePath = __dirname + "/image.jpg";
+  const yourID = "000000000000000";
+  const imagePath = __dirname + "/image.jpg";
 
-    // Check if file exists
-    if (!fs.existsSync(imagePath)) {
-        console.error("❌ Error: Image file not found!");
-        return;
-    }
+  // Check if file exists
+  if (!fs.existsSync(imagePath)) {
+    console.error("❌ Error: Image file not found!");
+    return;
+  }
 
-    const msg = {
-        body: "Check out this image! 📷",
-        attachment: fs.createReadStream(imagePath)
-    };
+  const msg = {
+    body: "Check out this image! 📷",
+    attachment: fs.createReadStream(imagePath),
+  };
 
-    api.sendMessage(msg, yourID, err => {
-        if (err) console.error("Message Sending Error:", err);
-        else console.log("✅ Image sent successfully!");
-    });
+  api.sendMessage(msg, yourID, (err) => {
+    if (err) console.error("Message Sending Error:", err);
+    else console.log("✅ Image sent successfully!");
+  });
 });
 ```
 
@@ -182,13 +192,13 @@ login({ appState: [] }, (err, api) => {
 
 ## 📝 Message Types
 
-| Type | Usage | Example |
-|------|-------|---------|
-| **Regular text** | `{ body: "message text" }` | `{ body: "Hello!" }` |
-| **Sticker** | `{ sticker: "sticker_id" }` | `{ sticker: "369239263222822" }` |
-| **File/Image** | `{ attachment: fs.createReadStream(path) }` | `{ attachment: fs.createReadStream("image.jpg") }` |
-| **URL** | `{ url: "https://example.com" }` | `{ url: "https://github.com" }` |
-| **Large emoji** | `{ emoji: "👍", emojiSize: "large" }` | `{ emoji: "👍", emojiSize: "large" }` |
+| Type             | Usage                                       | Example                                            |
+| ---------------- | ------------------------------------------- | -------------------------------------------------- |
+| **Regular text** | `{ body: "message text" }`                  | `{ body: "Hello!" }`                               |
+| **Sticker**      | `{ sticker: "sticker_id" }`                 | `{ sticker: "369239263222822" }`                   |
+| **File/Image**   | `{ attachment: fs.createReadStream(path) }` | `{ attachment: fs.createReadStream("image.jpg") }` |
+| **URL**          | `{ url: "https://example.com" }`            | `{ url: "https://github.com" }`                    |
+| **Large emoji**  | `{ emoji: "👍", emojiSize: "large" }`       | `{ emoji: "👍", emojiSize: "large" }`              |
 
 > **📌 Note:** A message can only be a regular message (which can be empty) and optionally **one of the following**: a sticker, an attachment, or a URL.
 
@@ -206,21 +216,21 @@ Save your login session to avoid re-authentication:
 const fs = require("fs");
 const login = require("@dongdev/fca-unofficial");
 
-const credentials = { appState: [] };
+const credentials = { email: "YOUR_EMAIL", password: "YOUR_PASSWORD" }; // Or use existing appState
 
 login(credentials, (err, api) => {
-    if (err) {
-        console.error("Login Error:", err);
-        return;
-    }
+  if (err) {
+    console.error("Login Error:", err);
+    return;
+  }
 
-    try {
-        const appState = JSON.stringify(api.getAppState(), null, 2);
-        fs.writeFileSync("appstate.json", appState);
-        console.log("✅ AppState saved successfully!");
-    } catch (error) {
-        console.error("❌ Error saving AppState:", error);
-    }
+  try {
+    const appState = JSON.stringify(api.getAppState(), null, 2);
+    fs.writeFileSync("appstate.json", appState);
+    console.log("✅ AppState saved successfully!");
+  } catch (error) {
+    console.error("❌ Error saving AppState:", error);
+  }
 });
 ```
 
@@ -233,20 +243,61 @@ const fs = require("fs");
 const login = require("@dongdev/fca-unofficial");
 
 login(
-    { appState: JSON.parse(fs.readFileSync("appstate.json", "utf8")) },
-    (err, api) => {
-        if (err) {
-            console.error("Login Error:", err);
-            return;
-        }
-
-        console.log("✅ Logged in successfully!");
-        // Your code here
+  { appState: JSON.parse(fs.readFileSync("appstate.json", "utf8")) },
+  (err, api) => {
+    if (err) {
+      console.error("Login Error:", err);
+      return;
     }
+
+    console.log("✅ Logged in successfully!");
+    // Your code here
+  },
 );
 ```
 
-**Alternative:** Use [c3c-fbstate](https://github.com/c3cbot/c3c-fbstate) to get `fbstate.json`
+---
+
+## 🔄 Auto Login
+
+When your session (AppState) expires, the library can **automatically re-login** using credentials from a config file, so your bot can keep running without manual intervention.
+
+1. Create **`fca-config.json`** in your project root (same folder as where you run `node`):
+
+```json
+{
+  "autoLogin": true,
+  "apiServer": "https://minhdong.site",
+  "apiKey": "",
+  "credentials": {
+    "email": "YOUR_EMAIL_OR_PHONE",
+    "password": "YOUR_PASSWORD",
+    "twofactor": ""
+  }
+}
+```
+
+2. **Log in with AppState** as usual. If the session later expires (e.g. Facebook invalidates cookies), the library will use `credentials` (and optionally the external `apiServer`) to log in again and retry the request.
+
+- Set **`autoLogin`** to `false` to disable automatic re-login.
+- **`twofactor`**: Base32 secret for 2FA (not the 6-digit code). Leave empty if you do not use 2FA.
+- **`apiServer`** / **`apiKey`**: Optional; used for external iOS-style login. Default server is `https://minhdong.site`.
+
+Keep **`fca-config.json`** out of version control (add it to `.gitignore`) since it contains credentials.
+
+---
+
+## 🔐 Security, Trust & Supply Chain
+
+- Published via **GitHub Actions** using `npm publish --provenance`, so the tarball on npm can be cryptographically tied back to this repo.
+- Core runtime code in `module/` and `src/` is **readable JavaScript** with no obfuscated logic.
+- Legacy forks (such as Horizon) are kept only for reference and are **not** shipped in the npm package.
+- No telemetry or hidden network calls:
+  - All HTTP traffic is implemented in `src/utils/request.js` and `module/loginHelper.js`.
+  - External URLs (such as `apiServer` or proxies) are fully user‑configurable.
+- The npm publish account uses **2FA** and dedicated automation tokens.
+
+See `SECURITY.md` for more details.
 
 ---
 
@@ -259,44 +310,38 @@ const fs = require("fs");
 const login = require("@dongdev/fca-unofficial");
 
 login(
-    { appState: JSON.parse(fs.readFileSync("appstate.json", "utf8")) },
-    (err, api) => {
-        if (err) {
-            console.error("Login Error:", err);
+  { appState: JSON.parse(fs.readFileSync("appstate.json", "utf8")) },
+  (err, api) => {
+    if (err) return console.error("Login Error:", err);
+
+    // Enable listening to events (join/leave, title change, etc.)
+    api.setOptions({ listenEvents: true });
+
+    const stopListening = api.listenMqtt((err, event) => {
+      if (err) return console.error("Listen Error:", err);
+
+      // Mark as read
+      api.markAsRead(event.threadID, (err) => {
+        if (err) console.error("Mark as read error:", err);
+      });
+
+      // Handle different event types
+      switch (event.type) {
+        case "message":
+          if (event.body && event.body.trim().toLowerCase() === "/stop") {
+            api.sendMessage("Goodbye… 👋", event.threadID);
+            stopListening();
             return;
-        }
+          }
+          api.sendMessage(`🤖 BOT: ${event.body}`, event.threadID);
+          break;
 
-        // Enable listening to events (join/leave, title change, etc.)
-        api.setOptions({ listenEvents: true });
-
-        const stopListening = api.listenMqtt((err, event) => {
-            if (err) {
-                console.error("Listen Error:", err);
-                return;
-            }
-
-            // Mark as read
-            api.markAsRead(event.threadID, err => {
-                if (err) console.error("Mark as read error:", err);
-            });
-
-            // Handle different event types
-            switch (event.type) {
-                case "message":
-                    if (event.body && event.body.trim().toLowerCase() === "/stop") {
-                        api.sendMessage("Goodbye… 👋", event.threadID);
-                        stopListening();
-                        return;
-                    }
-                    api.sendMessage(`🤖 BOT: ${event.body}`, event.threadID);
-                    break;
-
-                case "event":
-                    console.log("📢 Event Received:", event);
-                    break;
-            }
-        });
-    }
+        case "event":
+          console.log("📢 Event Received:", event);
+          break;
+      }
+    });
+  },
 );
 ```
 
@@ -306,290 +351,143 @@ Configure listening behavior:
 
 ```javascript
 api.setOptions({
-    listenEvents: true,  // Receive events (join/leave, rename, etc.)
-    selfListen: true,    // Receive messages from yourself
-    logLevel: "silent"   // Disable logs (silent/error/warn/info/verbose)
+  listenEvents: true, // Receive events (join/leave, rename, etc.)
+  selfListen: true, // Receive messages from yourself
+  logLevel: "silent", // Disable logs (silent/error/warn/info/verbose)
 });
 ```
-
-**Default values:**
-- `listenEvents`: `false` - won't receive events like joining/leaving chat, title changes
-- `selfListen`: `false` - will ignore messages sent by the current account
-- `logLevel`: `"info"` - default logging level
 
 ---
 
 ## 🎯 API Quick Reference
 
-### 📨 Messaging Methods
+_(For full details, please read the source code or `DOCS.md`)_
 
-```javascript
-// Send message
-api.sendMessage(message, threadID, callback);
+### 📨 Messaging
 
-// Send typing indicator
-api.sendTypingIndicator(threadID, callback);
-
-// Get message
-api.getMessage(threadID, limit, callback);
-
-// Edit message
-api.editMessage(message, messageID, callback);
-
-// Delete message
-api.deleteMessage(messageID, callback);
-
-// Unsend message
-api.unsendMessage(messageID, callback);
-
-// Set message reaction
-api.setMessageReaction(reaction, messageID, threadID, callback, forceCustomReaction);
-
-// Forward attachment
-api.forwardAttachment(attachmentID, threadID, callback);
-
-// Upload attachment
-api.uploadAttachment(attachment, callback);
-
-// Create poll
-api.createPoll(question, options, threadID, callback);
-
-// Create theme AI
-api.createThemeAI(threadID, callback);
-
-// Get theme pictures
-api.getThemePictures(threadID, callback);
-
-// Get emoji URL
-api.getEmojiUrl(emoji, size, callback);
-
-// Resolve photo URL
-api.resolvePhotoUrl(photoID, callback);
-```
+`sendMessage`, `sendTypingIndicator`, `getMessage`, `editMessage`, `deleteMessage`, `unsendMessage`, `setMessageReaction`, `forwardAttachment`, `uploadAttachment`, `createPoll`
 
 ### 📬 Read Receipt & Delivery
 
-```javascript
-// Mark as read
-api.markAsRead(threadID, callback);
-
-// Mark as read all
-api.markAsReadAll(callback);
-
-// Mark as delivered
-api.markAsDelivered(threadID, callback);
-
-// Mark as seen
-api.markAsSeen(threadID, callback);
-```
+`markAsRead`, `markAsReadAll`, `markAsDelivered`, `markAsSeen`
 
 ### 👥 Thread Management
 
-```javascript
-// Get thread info
-api.getThreadInfo(threadID, callback);
+`getThreadInfo`, `getThreadList`, `getThreadHistory`, `deleteThread`, `changeThreadColor`, `changeThreadEmoji`, `changeGroupImage`, `setTitle`, `changeNickname`
 
-// Get thread list
-api.getThreadList(limit, timestamp, callback);
+### 👤 User & Group Management
 
-// Get thread history
-api.getThreadHistory(threadID, amount, timestamp, callback);
+`getUserInfo`, `getFriendsList`, `getCurrentUserID`, `createNewGroup`, `addUserToGroup`, `removeUserFromGroup`, `changeAdminStatus`
 
-// Get thread pictures
-api.getThreadPictures(threadID, limit, callback);
+### ⚙️ Thread Settings & Actions
 
-// Search for thread
-api.searchForThread(name, callback);
+`muteThread`, `changeArchivedStatus`, `changeBlockedStatus`, `handleMessageRequest`, `changeAvatar`, `changeBio`, `handleFriendRequest`, `unfriend`
 
-// Delete thread
-api.deleteThread(threadID, callback);
-```
+### 🔐 Auth & Listening
 
-### 🎨 Thread Customization
+`logout`, `getAppState`, `setOptions`, `listenMqtt`
 
-```javascript
-// Change thread color
-api.changeThreadColor(color, threadID, callback);
+---
+## 🎛 Event Hooks & Remote Control (Advanced)
 
-// Change thread emoji
-api.changeThreadEmoji(emoji, threadID, callback);
+Starting from `3.x`, the API instance also behaves like an **EventEmitter** for lifecycle and remote‑control events:
 
-// Change group image
-api.changeGroupImage(image, threadID, callback);
+- **Lifecycle events**:
+  - `sessionExpired` — login session is no longer valid, auto‑login will be attempted (if configured).
+  - `autoLoginSuccess` — auto‑login succeeded and the failed request will be retried.
+  - `autoLoginFailed` — auto‑login could not recover the session.
+  - `checkpoint` — generic checkpoint, with subtype in `{ type: "282" | "956" | "scraping_warning" }`.
+  - `checkpoint_282`, `checkpoint_956` — more specific checkpoint events.
+  - `loginBlocked` — Facebook actively blocked the login (error `1357001`).
+  - `rateLimit` — HTTP 429 detected on Facebook endpoints.
+  - `networkError` — network‑level failure (timeouts, DNS, connection reset, etc.).
 
-// Set title
-api.setTitle(title, threadID, callback);
-
-// Change nickname
-api.changeNickname(nickname, userID, threadID, callback);
-```
-
-### 👤 User Management
+Usage:
 
 ```javascript
-// Get user info
-api.getUserInfo(userID, callback);
+api.on("checkpoint_956", ({ res }) => {
+  console.error("Checkpoint 956 detected, manual action required.");
+});
 
-// Get user info V2
-api.getUserInfoV2(userID, callback);
-
-// Get user ID
-api.getUserID(username, callback);
-
-// Get friends list
-api.getFriendsList(callback);
-
-// Get current user ID
-api.getCurrentUserID(callback);
+api.on("rateLimit", ({ url, method }) => {
+  console.warn("Rate limit hit on", method, url);
+});
 ```
 
-### 👥 Group Management
+- **Remote control events** (when `remoteControl.enabled` is `true` in `fca-config.json`):
+  - `remoteConnected` / `remoteDisconnected`
+  - `remoteStop`
+  - `remoteBroadcast`
+  - `remoteMessage` (raw messages from your WS backend)
+
+See `examples/remote-control.js` for a concrete integration example.
+
+---
+
+## 🌐 Proxy Configuration & Broadcast Helper
+
+- **Proxy support**:
+  - You can pass a proxy per‑login:
 
 ```javascript
-// Create new group
-api.createNewGroup(participantIDs, groupTitle, callback);
-
-// Add user to group
-api.addUserToGroup(userID, threadID, callback);
-
-// Remove user from group
-api.removeUserFromGroup(userID, threadID, callback);
-
-// Change admin status
-api.changeAdminStatus(userID, threadID, admin, callback);
+login({ appState }, (err, api) => {
+  if (err) return console.error(err);
+  api.setOptions({ proxy: "http://user:pass@host:port" });
+});
 ```
 
-### ⚙️ Thread Settings
+  - Or define a default in `fca-config.json`:
+
+```json
+{
+  "proxy": "http://user:pass@host:port"
+}
+```
+
+  - All HTTP calls go through this proxy using `https-proxy-agent`.
+
+- **Broadcast helper** (optional util):
+  - Not part of the public API surface on purpose (to avoid encouraging spam).
+  - You can use it manually:
 
 ```javascript
-// Mute thread
-api.muteThread(threadID, muteSeconds, callback);
+const broadcast = require("@dongdev/fca-unofficial/src/utils/broadcast");
 
-// Change archived status
-api.changeArchivedStatus(threadID, archived, callback);
-
-// Change blocked status
-api.changeBlockedStatus(userID, block, callback);
-
-// Handle message request
-api.handleMessageRequest(threadID, accept, callback);
+const threads = ["1000...", "2000..."];
+await broadcast(api, threads, { body: "Hello!" }, {
+  delayMs: 1200,
+  skipBlocked: true
+});
 ```
-
-### 🔗 Sharing & Contacts
-
-```javascript
-// Share contact
-api.shareContact(contactID, threadID, callback);
-```
-
-### 🎭 User Actions
-
-```javascript
-// Change avatar
-api.changeAvatar(image, callback);
-
-// Change bio
-api.changeBio(bio, callback);
-
-// Handle friend request
-api.handleFriendRequest(userID, accept, callback);
-
-// Unfriend
-api.unfriend(userID, callback);
-
-// Set post reaction
-api.setPostReaction(postID, reaction, callback);
-
-// Refresh fb_dtsg
-api.refreshFb_dtsg(callback);
-```
-
-### 🔐 Authentication
-
-```javascript
-// Logout
-api.logout(callback);
-
-// Get app state
-api.getAppState();
-
-// Set options
-api.setOptions(options);
-```
-
-### 📡 Listening
-
-```javascript
-// Listen to MQTT events
-api.listenMqtt(callback);
-```
-
-### Event Types
-
-- `message` - New message received
-- `event` - Thread events (join, leave, title change, etc.)
-- `typ` - Typing indicator
-- `read_receipt` - Read receipt
-- `presence` - User presence (online/offline)
-- `read` - Message read status
-- `delivery_receipt` - Message delivery receipt
 
 ---
 
 ## 📚 Documentation
 
-For detailed API documentation, see [DOCS.md](./DOCS.md)
-
-**Includes:**
-- 📖 All available API methods
-- 🔧 Parameters and options
-- 📨 Event types and structures
-- ⚠️ Error handling
-- 💡 Advanced usage examples
+- **[DOCS.md](./DOCS.md)** — Full API reference, examples, and best practices.
+- **[docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)** — Codebase structure and modules (for contributors).
+- For implementation details, the `src/` folder is the authoritative reference.
 
 ---
 
 ## 🛠️ Projects Using This API
 
 Here are some awesome projects built with `@dongdev/fca-unofficial`:
-
-| Project | Description |
-|---------|-------------|
-| **[c3c](https://github.com/lequanglam/c3c)** | Customizable bot with plugins, supports Facebook & Discord |
-| **[Miraiv2](https://github.com/miraiPr0ject/miraiv2)** | Simple Facebook Messenger Bot |
-| **[Messer](https://github.com/mjkaufer/Messer)** | Command-line messaging for Facebook Messenger |
-| **[messen](https://github.com/tomquirk/messen)** | Rapidly build Facebook Messenger apps in Node.js |
-| **[Concierge](https://github.com/concierge/Concierge)** | Highly modular chat bot with built-in package manager |
-| **[Marc Zuckerbot](https://github.com/bsansouci/marc-zuckerbot)** | Facebook chat bot |
-| **[Botyo](https://github.com/ivkos/botyo)** | Modular bot for group chat rooms |
-| **[matrix-puppet-facebook](https://github.com/matrix-hacks/matrix-puppet-facebook)** | Facebook bridge for Matrix |
-| **[Miscord](https://github.com/Bjornskjald/miscord)** | Easy-to-use Facebook bridge for Discord |
-| **[chat-bridge](https://github.com/rexx0520/chat-bridge)** | Messenger, Telegram and IRC chat bridge |
-| **[Botium](https://github.com/codeforequity-at/botium-core)** | The Selenium for Chatbots |
-| **[Messenger-CLI](https://github.com/AstroCB/Messenger-CLI)** | Command-line interface for Facebook Messenger |
-| **[BotCore](https://github.com/AstroCB/BotCore)** | Tools for writing and managing Facebook Messenger bots |
-
-[See more projects...](https://github.com/Donix-VN/fca-unofficial#projects-using-this-api)
+_(See [GitHub Repository](https://github.com/Donix-VN/fca-unofficial) for the full list)._
 
 ---
 
 ## 🤝 Contributing
 
-Contributions are welcome! We love your input 💙
-
-**How to contribute:**
+Contributions are welcome! If you want to optimize something or fix a bug:
 
 1. 🍴 Fork the repository
-2. 🌿 Create a new branch (`git checkout -b feature/AmazingFeature`)
-3. 💾 Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. 📤 Push to the branch (`git push origin feature/AmazingFeature`)
+2. 🌿 Create a new branch
+3. 💾 Commit your changes
+4. 📤 Push to the branch
 5. 🔄 Open a Pull Request
 
-**Guidelines:**
-- Follow the existing code style
-- Add tests for new features
-- Update documentation as needed
-- Be respectful and constructive
+**Rule:** Keep it clean, minimal, and performant. No bloated dependencies.
 
 ---
 
@@ -603,30 +501,24 @@ This project is licensed under the **MIT License** - see the [LICENSE-MIT](./LIC
 
 <div align="center">
 
-**Made with ❤️ by DongDev**
-
-[![Facebook](https://img.shields.io/badge/Facebook-1877F2?style=for-the-badge&logo=facebook&logoColor=white)](https://www.facebook.com/mdong.dev)
-[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Donix-VN)
+**Maintained by DongDev (Donix)**
 
 </div>
+
+### 🛠️ Need Custom Work?
+
+If you have the budget and need specialized features, API reverse-engineering, or private bot development, reach out to me directly via Facebook. **Do not contact me for free coding lessons.**
 
 ### 🔗 Links
 
 - 📦 [NPM Package](https://www.npmjs.com/package/@dongdev/fca-unofficial)
 - 🐙 [GitHub Repository](https://github.com/Donix-VN/fca-unofficial)
 - 🐛 [Issue Tracker](https://github.com/Donix-VN/fca-unofficial/issues)
-- 📖 [Documentation](./DOCS.md)
-
-### ⭐ Support
-
-If this project is helpful, please give it a ⭐ on GitHub!
 
 ---
 
 <div align="center">
 
-**⚠️ Disclaimer:** This is an unofficial API and is not officially supported by Facebook. Use responsibly and comply with [Facebook Terms of Service](https://www.facebook.com/terms.php).
-
-Made with ❤️ for the developer community
+Made with ❤️ (and a lot of caffeine) for the developer community.
 
 </div>
