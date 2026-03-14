@@ -22,24 +22,23 @@ module.exports = {
   langs: {
     en: {
       infoMessage:
-`╔════════════════════╗
-   🤖 NOOBCORE BOT INFO
-╚════════════════════╝
-
-📌 Bot Name: NoobCore-v3
-⚡ Version: 3.0
-👨‍💻 Developer: Noob Programmer
-🌐 Platform: Facebook Messenger
-🧠 System: Modular Command + Event Driven
-🔄 Multi AppState: Enabled
-
-Reply with:
-1️⃣ - Show Prefix
-2️⃣ - Show Admin List
-3️⃣ - Show Creator ID
-
-React ❤️ to get uptime status.
-`
+`╭─╼━━━━━━━━━━━━╾─╮
+│  🌟  ${"ＢＯＴ  ＩＮＦＯ"}  🌟  
+├─╼━━━━━━━━━━━━╾─╯
+│ 🤖 Name: NoobCore-v3
+│ ⚡ Version: 3.0
+│ 👨‍💻 Dev: Noob Programmer
+│ 🌐 Platform: Messenger
+│ 🧠 System: Modular
+│ 🔄 Multi-State: Enabled
+├─╼━━━━━━━━━━━━╾─╮
+│      ${"ＲＥＰＬＹ  ＷＩＴＨ"}      
+├─╼━━━━━━━━━━━━╾─╯
+│ 1️⃣ Prefix
+│ 2️⃣ Admin List
+│ 3️⃣ Creator ID
+╰─╼━━━━━━━━━━━━╾─╯
+💡 React ❤️ for Uptime status.`
     }
   },
 

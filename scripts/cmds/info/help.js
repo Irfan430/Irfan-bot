@@ -268,18 +268,34 @@ module.exports = {
         cats[category].push(name);
       }
 
-      let msg = `━━━━━━━━━━━━━━\n𝘈𝘷𝘢𝘪𝘭𝘢𝘣𝘭𝘦 𝘊𝘰𝘮𝘮𝘢𝘯𝘥𝘴:\n\n`;
+      let msg = `╭─╼━━━━━━━━━━━━╾─╮\n`;
+      msg += `│  🌟  ${applyFont("IRFAN BOT MENU", fontCategory)}  🌟  \n`;
+      msg += `╰─╼━━━━━━━━━━━━╾─╯\n\n`;
 
       for (const cat of Object.keys(cats).sort()) {
-        const emoji = categoryEmoji[cat] || "";
+        const emoji = categoryEmoji[cat] || "📁";
         const lines = chunkCommands(cats[cat].sort(), 50, t => applyFont(t, fontCommand));
-        msg += `╭─╼━━━━━━━━╾─╮\n│ ${emoji} | ${applyFont(cat, fontCategory)}\n`;
+        msg += `╭─╼━━━━━━━━━━━━╾─╮\n`;
+        msg += `│ ${emoji} ${applyFont(cat.toUpperCase(), fontCategory)}\n`;
+        msg += `├─╼━━━━━━━━━━━━╾─╯\n`;
         for (const l of lines) msg += `│ ${l}\n`;
-        msg += `╰─━━━━━━━━━╾─╯\n\n`;
+        msg += `╰─╼━━━━━━━━━━━━╾─╯\n\n`;
       }
 
-      msg += `• 𝙽𝚎𝚎𝚍 𝚑𝚎𝚕𝚙 with a command?\n Use ${prefix}help <commandname> to get full details.\n━━━━━━━━━━━━━━\n`;
-      msg += `Total Commands: ${all.length}\n ⏪ ${prefix}help ${page} | ${totalPages} ⏩\n Bot Name : ${global.noobCore.ncsetting.nickNameBot}\n 🗂️ Browse: ${prefix}help c category_name\n 👑 Dev: noobCore Team\n━━━━━━━━━━━━━━`;
+      msg += `╭─╼━━━━━━━━━━━━╾─╮\n`;
+      msg += `│ 💡 ${applyFont("Total Commands", fontCategory)}: ${all.length}\n`;
+      msg += `│ 📖 ${applyFont("Page", fontCategory)}: ${page} / ${totalPages}\n`;
+      msg += `│ 🤖 ${applyFont("Bot Name", fontCategory)}: ${global.noobCore.ncsetting.nickNameBot}\n`;
+      msg += `╰─╼━━━━━━━━━━━━╾─╯\n`;
+
+      const buttons = [
+        { title: "Admin Info", url: "https://www.facebook.com/Irfan.Khan.0430" },
+        { title: "Support Group", url: "https://m.me/j/AbY_X-8X8X8X8X8X/" }
+      ];
+
+      if (typeof message.sendCTA === "function") {
+        return message.sendCTA(msg, buttons);
+      }
 
       return message.reply({ body: msg });
     }

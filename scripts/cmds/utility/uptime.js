@@ -117,18 +117,17 @@ module.exports = {
             const usedMemory = this.byte2mb(usage.memory || 0);
             const memoryPercent = ((os.totalmem() - os.freemem()) / os.totalmem() * 100).toFixed(1);
 
-            const msg = `
-╔═══════════════════════════╗
-║      🖥️ SYSTEM STATUS     ║
-╠═══════════════════════════╣
-║ 📅 Date: ${new Date().toLocaleString("en-US", { timeZone: "Asia/Dhaka" })}
-║ ⏱️ Bot Uptime: ${this.getUptime(uptimeSeconds)}
-║ 💻 CPU Usage: ${cpuUsage}%
-║ 🎯 RAM: ${usedMemory} / ${totalMemory} (${memoryPercent}%)
-║ 💾 Disk: ${diskSpaceInfo.used} / ${diskSpaceInfo.total}
-║ 📊 Users: ${allUsers.length} | Groups: ${allThreads.length}
-║ ⚡ Speed: ${Date.now() - startTime}ms
-╚═══════════════════════════╝`.trim();
+            const msg = `╭─╼━━━━━━━━━━━━╾─╮
+│  🖥️  ${"ＳＹＳＴＥＭ  ＳＴＡＴＵＳ"}  │
+├─╼━━━━━━━━━━━━╾─╯
+│ 📅 Date: ${new Date().toLocaleString("en-US", { timeZone: "Asia/Dhaka" })}
+│ ⏱️ Uptime: ${this.getUptime(uptimeSeconds)}
+│ 💻 CPU: ${cpuUsage}%
+│ 🎯 RAM: ${usedMemory} / ${totalMemory}
+│ 💾 Disk: ${diskSpaceInfo.used} / ${diskSpaceInfo.total}
+│ 📊 Users: ${allUsers.length} | Groups: ${allThreads.length}
+│ ⚡ Speed: ${Date.now() - startTime}ms
+╰─╼━━━━━━━━━━━━╾─╯`.trim();
 
             return api.sendMessage(msg, event.threadID, event.messageID);
         } catch (e) {
