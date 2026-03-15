@@ -202,6 +202,17 @@ module.exports = function (defaultFuncs, api, ctx) {
       payload0.reply_metadata = { reply_source_id: replyToMessage, reply_source_type: 1, reply_type: 0 };
     }
 
+    if (m.buttons && Array.isArray(m.buttons)) {
+      payload0.cta_data = {
+        cta_title: baseBody,
+        cta_buttons: m.buttons.map(btn => ({
+          title: btn.title,
+          action_url: btn.url,
+          button_type: 1
+        }))
+      };
+    }
+
     if (m.attachment) {
       payload0.send_type = 3;
       if (payload0.text === "") payload0.text = null;

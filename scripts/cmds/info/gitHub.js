@@ -40,23 +40,21 @@ module.exports = {
         );
       }
       
-      const replyText = `
-𝐆𝐢𝐭𝐇𝐮𝐛 𝐏𝐫𝐨𝐟𝐢𝐥𝐞 𝐈𝐧𝐟𝐨 👀
-🧑‍💻 𝐍𝐚𝐦𝐞: ${data.name || "𝐍𝐨𝐧𝐞"}
-👤 𝐔𝐬𝐞𝐫: ${data.user || "𝐍𝐨𝐧𝐞"}
-🏢 𝐂𝐨𝐦𝐩𝐚𝐧𝐲: ${data.company || "𝐍𝐨𝐧𝐞"}
-🌐 𝐁𝐥𝐨𝐠: ${data.blog || "𝐍𝐨𝐧𝐞"}
-📍 𝐋𝐨𝐜𝐚𝐭𝐢𝐨𝐧: ${data.location || "𝐍𝐨𝐧𝐞"}
-📧 𝐄𝐦𝐚𝐢𝐥: ${data.email || "𝐍𝐨𝐧𝐞"}
-📝 𝐁𝐢𝐨: ${data.bio || "𝐍𝐨𝐧𝐞"}
-🐦 𝐓𝐰𝐢𝐭𝐭𝐞𝐫: ${data.twitter || "𝐍𝐨𝐭 𝐬𝐞𝐭"}
-📦 𝐏𝐮𝐛𝐥𝐢𝐜 𝐑𝐞𝐩𝐨𝐬: ${data.public_repos || 0}
-🗃 𝐏𝐮𝐛𝐥𝐢𝐜 𝐆𝐢𝐬𝐭𝐬: ${data.public_gists || 0}
-👥 𝐅𝐨𝐥𝐥𝐨𝐰𝐞𝐫𝐬: ${data.followers || 0}
-👣 𝐅𝐨𝐥𝐥𝐨𝐰𝐢𝐧𝐠: ${data.following || 0}
-📆 𝐂𝐫𝐞𝐚𝐭𝐞𝐝: ${new Date(data.created_at).toDateString()}
-🔄 𝐔𝐩𝐝𝐚𝐭𝐞𝐝: ${new Date(data.updated_at).toDateString()}
-`;
+      const replyText = `╭─╼━━━━━━━━━━━━╾─╮
+│  🐙  ${"ＧＩＴＨＵＢ  ＰＲＯＦＩＬＥ"}  │
+├─╼━━━━━━━━━━━━╾─╯
+│ 🧑‍💻 Name: ${data.name || "None"}
+│ 👤 User: ${data.user || "None"}
+│ 🏢 Company: ${data.company || "None"}
+│ 🌐 Blog: ${data.blog || "None"}
+│ 📍 Location: ${data.location || "None"}
+│ 📧 Email: ${data.email || "None"}
+│ 📝 Bio: ${data.bio || "None"}
+│ 📦 Repos: ${data.public_repos || 0}
+│ 👥 Followers: ${data.followers || 0}
+│ 👣 Following: ${data.following || 0}
+│ 📆 Created: ${new Date(data.created_at).toDateString()}
+╰─╼━━━━━━━━━━━━╾─╯`;
 
       await api.sendMessage(
         {

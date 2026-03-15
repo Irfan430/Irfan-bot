@@ -28,27 +28,26 @@ module.exports = {
   langs: {
     en: {
       spyInfo:
-        "╭─『 🕵️ USER INFORMATION 』\n" +
+        "╭─╼━━━━━━━━━━━━╾─╮\n" +
+        "│  🕵️  " + "ＵＳＥＲ  ＩＮＦＯ" + "  │\n" +
+        "├─╼━━━━━━━━━━━━╾─╯\n" +
         "│ 👤 Name: %1\n" +
         "│ 🆔 UID: %2\n" +
-        "│ 🔖 Username: %3\n" +
         "│ 🚻 Gender: %4\n" +
-        "│ 🤖 Bot Friend: %5\n" +
         "│ 🧾 Type: %6\n" +
-        "│ 🌐 Language: %7\n" +
-        "│\n" +
+        "├─╼━━━━━━━━━━━━╾─╮\n" +
+        "│      " + "ＥＣＯＮＯＭＹ" + "      │\n" +
+        "├─╼━━━━━━━━━━━━╾─╯\n" +
         "│ 💰 Money: %8\n" +
         "│ ⭐ EXP: %9\n" +
         "│ 🧠 Level: %10\n" +
-        "│\n" +
-        "│ 🌟 Premium: %11\n" +
-        "│ ⏱ Premium Expire: %12\n" +
-        "│\n" +
-        "│ 👥 Group Admin: %13\n" +
-        "│ 💬 Group Messages: %14\n" +
-        "│ 🏷 Group Nickname: %15\n" +
-        "│ 🚪 In Group: %16\n" +
-        "╰───────────────",
+        "├─╼━━━━━━━━━━━━╾─╮\n" +
+        "│      " + "ＧＲＯＵＰ  ＳＴＡＴＳ" + "      │\n" +
+        "├─╼━━━━━━━━━━━━╾─╯\n" +
+        "│ 👮 Admin: %13\n" +
+        "│ 💬 Messages: %14\n" +
+        "│ 🏷 Nickname: %15\n" +
+        "╰─╼━━━━━━━━━━━━╾─╯",
 
       yes: "Yes",
       no: "No",

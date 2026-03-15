@@ -77,19 +77,17 @@ module.exports.ncStart = async ({ api, event }) => {
     }
 
     const caption =
-      `✨ 𝐈𝐦𝐚𝐠𝐞 𝐃𝐞𝐭𝐚𝐢𝐥𝐬 ✨\n\n` +
-      `⦿ 𝐅𝐨𝐫𝐦𝐚𝐭: ${metadata.format || "Unknown"}\n` +
-      `⦿ 𝐖𝐢𝐝𝐭𝐡: ${metadata.width || 0}px\n` +
-      `⦿ 𝐇𝐞𝐢𝐠𝐡𝐭: ${metadata.height || 0}px\n` +
-      `⦿ 𝐀𝐬𝐩𝐞𝐜𝐭 𝐑𝐚𝐭𝐢𝐨: ${ratio} (${orientationType})\n` +
-      `⦿ 𝐅𝐢𝐥𝐞 𝐒𝐢𝐳𝐞: ${(imgBuffer.byteLength / 1024).toFixed(2)} KB (${(imgBuffer.byteLength / (1024 * 1024)).toFixed(2)} MB)\n` +
-      `⦿ 𝐁𝐢𝐭 𝐃𝐞𝐩𝐭𝐡: ${metadata.depth || "N/A"}\n` +
-      `⦿ 𝐂𝐡𝐚𝐧𝐧𝐞𝐥𝐬: ${metadata.channels || "N/A"}\n` +
-      `⦿ 𝐂𝐨𝐥𝐨𝐫 𝐒𝐩𝐚𝐜𝐞: ${metadata.space || "N/A"}\n` +
-      `⦿ 𝐇𝐚𝐬 𝐀𝐥𝐩𝐡𝐚: ${metadata.hasAlpha ? "Yes" : "No"}\n` +
-      `⦿ 𝐂𝐨𝐦𝐩𝐫𝐞𝐬𝐬𝐢𝐨𝐧: ${metadata.compression || "N/A"}\n` +
-      `⦿ 𝐎𝐫𝐢𝐞𝐧𝐭𝐚𝐭𝐢𝐨𝐧: ${metadata.orientation || "N/A"}\n` +
-      `⦿ 𝐏𝐫𝐨𝐠𝐫𝐞𝐬𝐬𝐢𝐯𝐞: ${metadata.isProgressive ? "Yes" : "No"}`;
+      `╭─╼━━━━━━━━━━━━╾─╮\n` +
+      `│  📸  ${"ＩＭＡＧＥ  ＤＥＴＡＩＬＳ"}  │\n` +
+      `├─╼━━━━━━━━━━━━╾─╯\n` +
+      `│ ⦿ Format: ${metadata.format || "Unknown"}\n` +
+      `│ ⦿ Width: ${metadata.width || 0}px\n` +
+      `│ ⦿ Height: ${metadata.height || 0}px\n` +
+      `│ ⦿ Ratio: ${ratio} (${orientationType})\n` +
+      `│ ⦿ Size: ${(imgBuffer.byteLength / 1024).toFixed(2)} KB\n` +
+      `│ ⦿ Space: ${metadata.space || "N/A"}\n` +
+      `│ ⦿ Alpha: ${metadata.hasAlpha ? "Yes" : "No"}\n` +
+      `╰─╼━━━━━━━━━━━━╾─╯`;
 
     await api.sendMessage(
       {

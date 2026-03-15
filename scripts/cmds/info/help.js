@@ -293,11 +293,7 @@ module.exports = {
         { title: "Support Group", url: "https://m.me/j/AbY_X-8X8X8X8X8X/" }
       ];
 
-      if (typeof message.sendCTA === "function") {
-        return message.sendCTA(msg, buttons);
-      }
-
-      return message.reply({ body: msg });
+      return message.reply({ body: msg, buttons });
     }
 
     async function sendCategoryList() {

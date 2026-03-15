@@ -36,19 +36,31 @@ module.exports = {
       );
 
       return message.reply(
-        "✅ Access Granted!\nYou are now connected to our Support Group."
+        `╭─╼━━━━━━━━━━━━╾─╮\n` +
+        `│  ✅  ${"ＡＣＣＥＳＳ  ＧＲＡＮＴＥＤ"}  │\n` +
+        `├─╼━━━━━━━━━━━━╾─╯\n` +
+        `│ 🌟 You are now connected\n` +
+        `│ 👥 to our Support Group.\n` +
+        `╰─╼━━━━━━━━━━━━╾─╯`
       );
 
     } catch (error) {
       console.error("SupportGC Add Error:", error);
 
       return message.reply(
-        "❌ Unable to add you to the Support Group.\n" +
-        "➡ Possible reasons:\n" +
-        "• Your profile is private\n" +
-        "• You blocked the bot\n" +
-        "• Bot is not admin\n\n" +
-        "📩 Send friend request to the bot and try again."
+        `╭─╼━━━━━━━━━━━━╾─╮\n` +
+        `│  ❌  ${"ＡＤＤ  ＦＡＩＬＥＤ"}  │\n` +
+        `├─╼━━━━━━━━━━━━╾─╯\n` +
+        `│ ➡ Possible reasons:\n` +
+        `│ • Profile is private\n` +
+        `│ • Bot is blocked\n` +
+        `│ • Bot is not admin\n` +
+        `├─╼━━━━━━━━━━━━╾─╮\n` +
+        `│      ${"ＳＵＧＧＥＳＴＩＯＮ"}      │\n` +
+        `├─╼━━━━━━━━━━━━╾─╯\n` +
+        `│ 📩 Send friend request\n` +
+        `│ to the bot and try again.\n` +
+        `╰─╼━━━━━━━━━━━━╾─╯`
       );
     }
   }
