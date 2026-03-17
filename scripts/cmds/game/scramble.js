@@ -10,7 +10,7 @@ module.exports = {
 	config: {
 		name: "scramble",
 		aliases: ["wordgame", "ws"],
-		version: "1.0",
+		version: "1.1",
 		author: "Manus AI",
 		countDown: 5,
 		role: 0,
@@ -27,7 +27,6 @@ module.exports = {
 
 	ncStart: async function ({ api, event }) {
 		try {
-			// List of words for the game
 			const words = [
 				"FACEBOOK", "MESSENGER", "JAVASCRIPT", "NODEJS", "COMPUTER",
 				"INTERNET", "PROGRAMMING", "SOFTWARE", "HARDWARE", "DATABASE",
@@ -38,25 +37,22 @@ module.exports = {
 			];
 
 			const originalWord = words[Math.floor(Math.random() * words.length)];
-			
-			// Scramble the word
 			let scrambledWord = originalWord.split('').sort(() => Math.random() - 0.5).join('');
 			
-			// Ensure scrambled word is different from original
 			while (scrambledWord === originalWord) {
 				scrambledWord = originalWord.split('').sort(() => Math.random() - 0.5).join('');
 			}
 
-			const body = `🎮 𝐖𝐎𝐑𝐃 𝐒𝐂𝐑𝐀𝐌𝐁𝐋𝐄 🎮\n\n` +
-				`🔠 Scrambled Word: **${scrambledWord}**\n\n` +
-				`💡 Hint: It's a tech or social media related word.\n` +
-				`💰 Reward: 500 Coins\n` +
-				`⏱️ You have 30 seconds to reply with the correct word!`;
+			const body = `╭─── 𝐒𝐂𝐑𝐀𝐌𝐁𝐋𝐄 ───╮\n` +
+				`│ 🔠 Word: **${scrambledWord}**\n` +
+				`│ 💡 Hint: Tech/Social\n` +
+				`│ 💰 Reward: 500 Coins\n` +
+				`│ ⏱️ Time: 30 Seconds\n` +
+				`╰────────────────╯`;
 
 			api.sendMessage(body, event.threadID, (err, info) => {
 				if (err) return;
 
-				// Store game state in global reply handler
 				if (!global.noobCore) global.noobCore = {};
 				if (!global.noobCore.ncReply) global.noobCore.ncReply = new Map();
 
@@ -69,20 +65,18 @@ module.exports = {
 					isEnded: false
 				});
 
-				// Auto-end game after 30 seconds
 				setTimeout(async () => {
 					const gameState = global.noobCore.ncReply.get(info.messageID);
 					if (gameState && !gameState.isEnded) {
 						gameState.isEnded = true;
-						api.sendMessage(`⏰ Time's up! The correct word was: **${originalWord}**`, event.threadID, info.messageID);
+						api.sendMessage(`╭─── 𝐓𝐈𝐌𝐄'𝐒 𝐔𝐏 ───╮\n│ ⏰ Game Over!\n│ ✅ Word: **${originalWord}**\n╰────────────────╯`, event.threadID, info.messageID);
 						global.noobCore.ncReply.delete(info.messageID);
 					}
 				}, 30000);
 			}, event.messageID);
 
 		} catch (error) {
-			console.error(error);
-			api.sendMessage("❌ Failed to start the game. Please try again.", event.threadID, event.messageID);
+			api.sendMessage("╭─── 𝐄𝐑𝐑𝐎𝐑 ───╮\n│ ❌ Game failed\n╰─────────────╯", event.threadID, event.messageID);
 		}
 	},
 
@@ -101,21 +95,17 @@ module.exports = {
 				userData.money = (userData.money || 0) + reward;
 				await usersData.set(event.senderID, userData);
 
-				const successMsg = `🎉 CONGRATULATIONS! 🎉\n\n` +
-					`✅ Correct Word: **${correctWord}**\n` +
-					`👤 Winner: @${event.senderID}\n` +
-					`💰 Reward: +${reward} Coins\n\n` +
-					`Well done! You unscrambled it!`;
+				const successMsg = `╭─── 𝐖𝐈𝐍𝐍𝐄𝐑 ───╮\n` +
+					`│ 🎉 Correct: **${correctWord}**\n` +
+					`│ 👤 User: @${event.senderID}\n` +
+					`│ 💰 Reward: +${reward} Coins\n` +
+					`╰───────────────╯`;
 
 				api.sendMessage(successMsg, event.threadID, event.messageID);
 				global.noobCore.ncReply.delete(messageID);
 			} catch (error) {
-				console.error(error);
-				api.sendMessage(`✅ Correct! The word was **${correctWord}**. (Error updating coins)`, event.threadID, event.messageID);
+				api.sendMessage(`╭─── 𝐖𝐈𝐍𝐍𝐄𝐑 ───╮\n│ ✅ Correct: **${correctWord}**\n╰───────────────╯`, event.threadID, event.messageID);
 			}
-		} else {
-			// Optional: Provide feedback for wrong guess or just ignore to allow others to try
-			// For a "Live" feel, we don't restrict to the author, anyone can guess!
 		}
 	}
 };
