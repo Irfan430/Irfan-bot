@@ -26,11 +26,13 @@ module.exports = function (defaultFuncs, api, ctx) {
 
       let attachmentID = null;
       if (data.attachment) {
+        log.info("Uploading story attachment...");
         const uploadRes = await api.uploadAttachment(data.attachment);
         if (uploadRes && uploadRes.length > 0) {
           attachmentID = uploadRes[0];
+          log.info(`Attachment uploaded successfully. ID: ${attachmentID}`);
         } else {
-          throw new Error("Failed to upload story attachment.");
+          throw new Error("Failed to upload story attachment. No ID returned.");
         }
       }
 
@@ -53,19 +55,28 @@ module.exports = function (defaultFuncs, api, ctx) {
         fb_api_caller_class: "RelayModern",
         fb_api_req_friendly_name: "StoriesCreateMutation",
         variables: JSON.stringify(variables),
-        doc_id: "5493172230761756" // Latest known doc_id for story creation
+        doc_id: "5493172230761756"
       };
 
+      log.info("Sending story creation request to Facebook...");
       const res = await defaultFuncs.post("https://www.facebook.com/api/graphql/", ctx.jar, form);
+      
+      if (!res || !res.body) {
+        throw new Error("Empty response from Facebook.");
+      }
+
       const resData = JSON.parse(res.body.replace("for (;;);", ""));
 
       if (resData.errors) {
-        throw resData.errors;
+        log.error("createStory", JSON.stringify(resData.errors));
+        throw new Error(resData.errors[0].message || "Facebook API error.");
       }
 
-      callback(null, resData.data.story_create);
+      log.info("Story created successfully!");
+      callback(null, resData.data ? resData.data.story_create : resData);
     } catch (err) {
-      log.error("createStory", err);
+      const errMsg = err.message || JSON.stringify(err);
+      log.error("createStory", errMsg);
       callback(err);
     }
 

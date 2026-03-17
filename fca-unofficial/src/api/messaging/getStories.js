@@ -33,19 +33,28 @@ module.exports = function (defaultFuncs, api, ctx) {
         fb_api_caller_class: "RelayModern",
         fb_api_req_friendly_name: "StoriesTrayQuery",
         variables: JSON.stringify(variables),
-        doc_id: "5493172230761756" // Reusing doc_id for now, might need specific one
+        doc_id: "5493172230761756"
       };
 
+      log.info("Fetching stories tray from Facebook...");
       const res = await defaultFuncs.post("https://www.facebook.com/api/graphql/", ctx.jar, form);
+      
+      if (!res || !res.body) {
+        throw new Error("Empty response from Facebook.");
+      }
+
       const resData = JSON.parse(res.body.replace("for (;;);", ""));
 
       if (resData.errors) {
-        throw resData.errors;
+        log.error("getStories", JSON.stringify(resData.errors));
+        throw new Error(resData.errors[0].message || "Facebook API error.");
       }
 
-      callback(null, resData.data.stories_tray);
+      log.info("Stories tray fetched successfully!");
+      callback(null, resData.data ? resData.data.stories_tray : resData);
     } catch (err) {
-      log.error("getStories", err);
+      const errMsg = err.message || JSON.stringify(err);
+      log.error("getStories", errMsg);
       callback(err);
     }
 

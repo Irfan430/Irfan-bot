@@ -96,8 +96,8 @@ function getCategoryFromPath(commandPath) {
 module.exports = {
   config: {
     name: "help",
-    version: "7.6",
-    modify: ["NC-XNIL", "NC-SAIM"],
+    version: "8.0",
+    modify: ["Manus AI"],
     author: "NoobCore Team",
     countDown: 5,
     role: 0,
@@ -139,7 +139,6 @@ module.exports = {
       } else if (cmd.config.dirPath) {
         category = getCategoryFromPath(cmd.config.dirPath);
       } else if (cmd.location) {
-        // Fallback to location property if filePath not set
         category = getCategoryFromPath(cmd.location);
       }
 
@@ -179,7 +178,7 @@ module.exports = {
 
       if (!matchedCat) {
         return message.reply(
-          `❌ Category "${applyFont(args[1], fontCategory)}" not found.\nAvailable: ${Object.keys(catIndex).map(c => applyFont(c, fontCategory)).join(", ")}\nUse: ${prefix}help c <name> [page]`
+          `╭─── 𝐄𝐑𝐑𝐎𝐑 ───╮\n│ ❌ Category not found\n│ 📝 Available: ${Object.keys(catIndex).join(", ")}\n╰─────────────╯`
         );
       }
       return sendCategory(matchedCat, pageNum);
@@ -196,7 +195,7 @@ module.exports = {
     if (!cmd) {
       const maybeCat = findCategory(normalizeCat(query), Object.keys(catIndex));
       if (maybeCat) return sendCategory(maybeCat, 1);
-      return message.reply(`❌ Command or category "${applyFont(query, fontCommand)}" not found.\nTry: ${prefix}help category`);
+      return message.reply(`╭─── 𝐄𝐑𝐑𝐎𝐑 ───╮\n│ ❌ Command not found\n│ 💡 Try: ${prefix}help category\n╰─────────────╯`);
     }
 
     return sendCommandDetail(cmd);
@@ -214,7 +213,6 @@ module.exports = {
                       cfg.role === 3 ? "💻 Creator" : "❓ Unknown Role";
       const aliasesList = Array.isArray(cfg.aliases) && cfg.aliases.length ? cfg.aliases.join(", ") : "None";
 
-      // Get category from file path, with fallback to location
       let category = "other";
       if (cfg.filePath) {
         category = getCategoryFromPath(cfg.filePath);
@@ -225,7 +223,7 @@ module.exports = {
       }
       category = capitalize(category);
 
-      const emoji = categoryEmoji[category.toLowerCase()] || "";
+      const emoji = categoryEmoji[category.toLowerCase()] || "📁";
       const shortDesc = typeof cfg.shortDescription === "string" ? cfg.shortDescription : cfg.shortDescription?.en || "";
 
       let guide = cfg.guide || "";
@@ -234,26 +232,18 @@ module.exports = {
                    .replace(/\{name\}|\{n\}/g, name)
                    .replace(/\{pn\}/g, prefix + name);
 
-      const premium = cfg.premium || false;
-      const modify = cfg.modify || ["NoobCore Team"];
-      const usePrefix = cfg.usePrefix !== false;
-
-      let msg = `╭─╼════════════════╾─╮\n`;
-      msg += `│ 📘 Command: ${applyFont(prefix + name, fontCommand)}\n`;
-      msg += `│ 🗂️ Category: ${emoji} | ${applyFont(category, fontCategory)}\n`;
-      msg += `│ 📄 Description: ${shortDesc || "No description"}\n`;
+      let msg = `╭─── 𝐂𝐎𝐌𝐌𝐀𝐍𝐃 ───╮\n`;
+      msg += `│ 📘 Name: ${applyFont(prefix + name, fontCommand)}\n`;
+      msg += `│ 🗂️ Category: ${emoji} ${applyFont(category, fontCategory)}\n`;
+      msg += `│ 📄 Info: ${shortDesc || "No description"}\n`;
       msg += `│ 🧩 Aliases: ${aliasesList}\n`;
       msg += `│ ⚙️ Version: ${version}\n`;
       msg += `│ ⏳ Cooldown: ${cooldown}s\n`;
       msg += `│ 🧷 Role: ${roleText}\n`;
       msg += `│ 👑 Author: ${author}\n`;
-      msg += `│ 💎 Premium Only: ${premium ? "✅ Yes" : "❌ No"}\n`;
-      msg += `│ 🧮 modified by: ${modify} \n`;
-      msg += `│ 🔤 Use Prefix: ${usePrefix ? "✅ Yes" : "❌ No"}\n`;
-      msg += `╰─╼════════════════╾─╯\n`;
-
+      msg += `├─────────────────╮\n`;
       msg += guide ? guide.split("\n").map(l => "│ 📜 " + l).join("\n") + "\n" : "│ 📜 Usage: No guide available\n";
-      msg += `╰─╼════════════════╾─╯`;
+      msg += `╰─────────────────╯`;
 
       return message.send({ body: msg });
     }
@@ -268,25 +258,23 @@ module.exports = {
         cats[category].push(name);
       }
 
-      let msg = `╭─╼━━━━━━━━━━━━╾─╮\n`;
-      msg += `│  🌟  ${applyFont("IRFAN BOT MENU", fontCategory)}  🌟  \n`;
-      msg += `╰─╼━━━━━━━━━━━━╾─╯\n\n`;
+      let msg = `╭─── 𝐈𝐑𝐅𝐀𝐍 𝐁𝐎𝐓 ───╮\n`;
+      msg += `│  🌟  ${applyFont("MAIN MENU", fontCategory)}  🌟  \n`;
+      msg += `╰─────────────────╯\n\n`;
 
       for (const cat of Object.keys(cats).sort()) {
         const emoji = categoryEmoji[cat] || "📁";
         const lines = chunkCommands(cats[cat].sort(), 50, t => applyFont(t, fontCommand));
-        msg += `╭─╼━━━━━━━━━━━━╾─╮\n`;
-        msg += `│ ${emoji} ${applyFont(cat.toUpperCase(), fontCategory)}\n`;
-        msg += `├─╼━━━━━━━━━━━━╾─╯\n`;
+        msg += `╭─── ${emoji} ${applyFont(cat.toUpperCase(), fontCategory)} ───╮\n`;
         for (const l of lines) msg += `│ ${l}\n`;
-        msg += `╰─╼━━━━━━━━━━━━╾─╯\n\n`;
+        msg += `╰─────────────────╯\n\n`;
       }
 
-      msg += `╭─╼━━━━━━━━━━━━╾─╮\n`;
-      msg += `│ 💡 ${applyFont("Total Commands", fontCategory)}: ${all.length}\n`;
-      msg += `│ 📖 ${applyFont("Page", fontCategory)}: ${page} / ${totalPages}\n`;
-      msg += `│ 🤖 ${applyFont("Bot Name", fontCategory)}: ${global.noobCore.ncsetting.nickNameBot}\n`;
-      msg += `╰─╼━━━━━━━━━━━━╾─╯\n`;
+      msg += `╭─── 𝐒𝐓𝐀𝐓𝐔𝐒 ───╮\n`;
+      msg += `│ 💡 Total: ${all.length}\n`;
+      msg += `│ 📖 Page: ${page} / ${totalPages}\n`;
+      msg += `│ 🤖 Nick: ${global.noobCore.ncsetting.nickNameBot}\n`;
+      msg += `╰───────────────╯\n`;
 
       const buttons = [
         { title: "Admin Info", url: "https://www.facebook.com/Irfan.Khan.0430" },
@@ -298,30 +286,37 @@ module.exports = {
 
     async function sendCategoryList() {
       const entries = Object.entries(catIndex).sort((a, b) => a[0].localeCompare(b[0]));
-      let msg = `━━━━━━━━━━━━━━\n🗂️ CATEGORIES\n`;
+      let msg = `╭─── 𝐂𝐀𝐓𝐄𝐆𝐎𝐑𝐈𝐄𝐒 ───╮\n`;
 
       for (const [cat, names] of entries) {
-        const emoji = categoryEmoji[cat] || "";
-        msg += `• ${emoji} | ${applyFont(cat, fontCategory)} — ${names.length}\n`;
+        const emoji = categoryEmoji[cat] || "📁";
+        msg += `│ ${emoji} ${applyFont(cat, fontCategory)} (${names.length})\n`;
       }
 
-      msg += `━━━━━━━━━━━━━━\nUse: ${prefix}help c <name> [page]\nExample: ${prefix}help c tools\n━━━━━━━━━━━━━━`;
+      msg += `├───────────────────╮\n`;
+      msg += `│ 💡 Use: ${prefix}help c <name>\n`;
+      msg += `╰───────────────────╯`;
 
       return message.reply({ body: msg });
     }
 
     async function sendCategory(cat, pageNum) {
       const names = (catIndex[cat] || []).sort();
-      if (!names.length) return message.reply(`❌ No commands in category "${applyFont(cat, fontCategory)}".`);
+      if (!names.length) return message.reply(`❌ No commands in category "${cat}".`);
 
       const chunks = chunkArray(names, PER_PAGE);
       const total = chunks.length || 1;
       const page = Math.max(1, Math.min(total, pageNum));
       const lines = chunkCommands(chunks[page - 1], 50, t => applyFont(t, fontCommand));
 
-      let msg = `━━━━━━━━━━━━━━\n🗂️ CATEGORY: ${applyFont(cat, fontCategory)}\n`;
-      for (const l of lines) msg += `${l}\n`;
-      msg += `\nTotal: ${names.length} command(s) | Page ${page}/${total}\nℹ️ View details: ${prefix}help <command>\n━━━━━━━━━━━━━━`;
+      let msg = `╭─── 𝐂𝐀𝐓𝐄𝐆𝐎𝐑𝐘 ───╮\n`;
+      msg += `│ 🗂️ ${applyFont(cat.toUpperCase(), fontCategory)}\n`;
+      msg += `├─────────────────╮\n`;
+      for (const l of lines) msg += `│ ${l}\n`;
+      msg += `├─────────────────╮\n`;
+      msg += `│ 💡 Total: ${names.length}\n`;
+      msg += `│ 📖 Page: ${page}/${total}\n`;
+      msg += `╰─────────────────╯`;
 
       return message.reply({ body: msg });
     }
