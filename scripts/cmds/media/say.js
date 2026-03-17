@@ -24,7 +24,7 @@ module.exports = {
 
   ncStart: async function ({ args, message }) {
     const text = args.join(" ").trim();
-    if (!text) return message.reply("⚠️ Please provide some Bangla text to speak!");
+    if (!text) return message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ⚠️ Please provide some Bangla text to speak!\n╰──────────────╯");
 
     try {
   
@@ -48,7 +48,7 @@ module.exports = {
 
     } catch (err) {
       console.error("❌ Say command error:", err);
-      message.reply("❌ Failed to generate voice!");
+      message.reply("╭─── 𝐄𝐑𝐑𝐎𝐑 ───╮\n│ ❌ Failed to generate voice!\n╰──────────────╯");
     }
   }
 };

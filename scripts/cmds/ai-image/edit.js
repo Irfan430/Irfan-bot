@@ -37,10 +37,10 @@ module.exports = {
     }
 
     if (!prompt) {
-      return message.reply("❌ Please provide an edit prompt.");
+      return message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ❌ Please provide an edit prompt.\n╰──────────────╯");
     }
 
-    const processingMsg = await message.reply("🖌️ Editing image...");
+    const processingMsg = await message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ 🖌️ Editing image...\n╰──────────────╯");
 
     const imgPath = path.join(
       __dirname,
@@ -75,7 +75,7 @@ module.exports = {
     } catch (error) {
       console.error("EDIT Error:", error?.response?.data || error.message);
       await api.unsendMessage(processingMsg.messageID);
-      message.reply("❌ Failed to edit image. Try again later.");
+      message.reply("╭─── 𝐄𝐑𝐑𝐎𝐑 ───╮\n│ ❌ Failed to edit image. Try again later.\n╰──────────────╯");
     } finally {
       if (fs.existsSync(imgPath)) {
         await fs.remove(imgPath);

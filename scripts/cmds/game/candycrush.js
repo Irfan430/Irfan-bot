@@ -24,7 +24,7 @@ module.exports = {
     if (args[0] === "top") {
       const top = await getTopPlayers(api, usersData);
       if (!top.length)
-        return message.reply("⚡ No players yet!");
+        return message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ⚡ No players yet!\n╰──────────────╯");
 
       let msg = "🏆 CANDY CRUSH TOP 5 🏆\n\n";
       top.forEach((p, i) => {
@@ -36,11 +36,11 @@ module.exports = {
     // ===== BET =====
     const bet = Number(args[0]);
     if (!bet || bet <= 0)
-      return message.reply("❌ Use: -cc <bet>");
+      return message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ❌ Use: -cc <bet>\n╰──────────────╯");
 
     const user = await usersData.get(event.senderID);
     if ((user?.money || 0) < bet)
-      return message.reply("❌ Not enough balance!");
+      return message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ❌ Not enough balance!\n╰──────────────╯");
 
     const board = generateBoard();
 

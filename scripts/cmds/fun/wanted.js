@@ -33,7 +33,7 @@ module.exports = {
 
       const apiBaseRes = await axios.get("https://raw.githubusercontent.com/noobcore404/NC-STORE/main/NCApiUrl.json");
       const apiBase = apiBaseRes.data?.apiv1;
-      if (!apiBase) return message.reply("❌ API base URL missing.");
+      if (!apiBase) return message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ❌ API base URL missing.\n╰──────────────╯");
 
       const apiURL = `${apiBase}/api/wanted?url=${encodeURIComponent(avatarURL)}`;
       const imgPath = path.join(__dirname, "tmp", `${targetID}_wanted.png`);
@@ -50,7 +50,7 @@ module.exports = {
 
     } catch (err) {
       console.error(err);
-      message.reply("❌ Failed to generate wanted poster. Please try again later.");
+      message.reply("╭─── 𝐄𝐑𝐑𝐎𝐑 ───╮\n│ ❌ Failed to generate wanted poster. Please try again later.\n╰──────────────╯");
     }
   }
 };

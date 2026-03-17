@@ -46,7 +46,7 @@ module.exports = {
 
     if (!videos.length) {
       api.setMessageReaction("❌", event.messageID, event.threadID, () => {}, true);
-      return api.sendMessage("⚠️ No anime edits found for your request.", event.threadID, event.messageID);
+      return api.sendMessage("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ⚠️ No anime edits found for your request.\n╰──────────────╯", event.threadID, event.messageID);
     }
 
     const v = videos[Math.floor(Math.random() * videos.length)];
@@ -60,7 +60,7 @@ module.exports = {
     const videoUrl = v.video || v.play;
     if (!videoUrl) {
       api.setMessageReaction("❌", event.messageID, event.threadID, () => {}, true);
-      return api.sendMessage("⚠️ Source URL is missing.", event.threadID, event.messageID);
+      return api.sendMessage("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ⚠️ Source URL is missing.\n╰──────────────╯", event.threadID, event.messageID);
     }
 
     try {
@@ -82,7 +82,7 @@ module.exports = {
     } catch (err) {
       console.error("Download Error:", err.message);
       api.setMessageReaction("❌", event.messageID, event.threadID, () => {}, true);
-      api.sendMessage("⚠️ Unable to stream this video. Try again.", event.threadID, event.messageID);
+      api.sendMessage("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ⚠️ Unable to stream this video. Try again.\n╰──────────────╯", event.threadID, event.messageID);
     }
   },
 };

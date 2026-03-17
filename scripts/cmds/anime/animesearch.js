@@ -18,7 +18,7 @@ module.exports = {
   ncStart: async function({ api, event, args }) {
     const query = args.join(" ");
     if (!query)
-      return api.sendMessage("🔍 | Please provide an anime name!", event.threadID, event.messageID);
+      return api.sendMessage("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ 🔍 | Please provide an anime name!\n╰──────────────╯", event.threadID, event.messageID);
 
     api.setMessageReaction("⌛️", event.messageID, () => {}, true);
 
@@ -61,12 +61,12 @@ module.exports = {
       writer.on("error", err => {
         console.error(err);
         api.setMessageReaction("❌️", event.messageID, () => {}, true);
-        api.sendMessage("❌ | Failed to send video!", event.threadID, event.messageID);
+        api.sendMessage("╭─── 𝐄𝐑𝐑𝐎𝐑 ───╮\n│ ❌ | Failed to send video!\n╰──────────────╯", event.threadID, event.messageID);
       });
     } catch (err) {
       console.error("❌ animesearch error:", err.message);
       api.setMessageReaction("❌️", event.messageID, () => {}, true);
-      api.sendMessage("⚠️ | Something went wrong, please try again later.", event.threadID, event.messageID);
+      api.sendMessage("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ⚠️ | Something went wrong, please try again later.\n╰──────────────╯", event.threadID, event.messageID);
     }
   }
 };

@@ -58,7 +58,7 @@ module.exports = {
 			const BASE_API = rawData.ncazad;
 
 			if (!BASE_API) {
-				return message.reply("❌ base API not found in RAW JSON");
+				return message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ❌ base API not found in RAW JSON\n╰──────────────╯");
 			}
 
 			const apiUrl =

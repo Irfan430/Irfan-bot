@@ -47,7 +47,7 @@ module.exports = {
       form.doc_id = "4108254489275063";
       actionType = "Rejected";
     } else {
-      return api.sendMessage("❌ Invalid command. Usage: <add|del> <number|all>", event.threadID, event.messageID);
+      return api.sendMessage("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ❌ Invalid command. Usage: <add|del> <number|all>\n╰──────────────╯", event.threadID, event.messageID);
     }
 
     let targetIDs = args.slice(1);
@@ -90,7 +90,7 @@ module.exports = {
     if (failed.length > 0) replyMsg += failed.join("\n");
 
     if (replyMsg) api.sendMessage(replyMsg, event.threadID, event.messageID);
-    else api.sendMessage("❌ 𝐍𝐨 𝐯𝐚𝐥𝐢𝐝 𝐫𝐞𝐪𝐮𝐞𝐬𝐭𝐬 𝐰𝐞𝐫𝐞 𝐩𝐫𝐨𝐜𝐞𝐬𝐬𝐞𝐝.", event.threadID);
+    else api.sendMessage("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ❌ 𝐍𝐨 𝐯𝐚𝐥𝐢𝐝 𝐫𝐞𝐪𝐮𝐞𝐬𝐭𝐬 𝐰𝐞𝐫𝐞 𝐩𝐫𝐨𝐜𝐞𝐬𝐬𝐞𝐝.\n╰──────────────╯", event.threadID);
 
     api.unsendMessage(messageID);
   },
@@ -109,7 +109,7 @@ module.exports = {
       const listRequest = JSON.parse(response).data.viewer.friending_possibilities.edges;
 
       if (!listRequest || listRequest.length === 0) {
-        return api.sendMessage("🌟 𝐘𝐨𝐮 𝐡𝐚𝐯𝐞 𝐧𝐨 𝐩𝐞𝐧𝐝𝐢𝐧𝐠 𝐟𝐫𝐢𝐞𝐧𝐝 𝐫𝐞𝐪𝐮𝐞𝐬𝐭𝐬!", event.threadID);
+        return api.sendMessage("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ 🌟 𝐘𝐨𝐮 𝐡𝐚𝐯𝐞 𝐧𝐨 𝐩𝐞𝐧𝐝𝐢𝐧𝐠 𝐟𝐫𝐢𝐞𝐧𝐝 𝐫𝐞𝐪𝐮𝐞𝐬𝐭𝐬!\n╰──────────────╯", event.threadID);
       }
 
       let msg = "╔═══》 𝐅𝐫𝐢𝐞𝐧𝐝 𝐑𝐞𝐪𝐮𝐞𝐬𝐭𝐬 《 ═══╗\n\n";
@@ -143,7 +143,7 @@ module.exports = {
 
     } catch (error) {
       console.error(error);
-      api.sendMessage("❌ 𝐄𝐫𝐫𝐨𝐫 𝐨𝐜𝐜𝐮𝐫𝐫𝐞𝐝 𝐰𝐡𝐢𝐥𝐞 𝐟𝐞𝐭𝐜𝐡𝐢𝐧𝐠 𝐟𝐫𝐢𝐞𝐧𝐝 𝐫𝐞𝐪𝐮𝐞𝐬𝐭𝐬.", event.threadID);
+      api.sendMessage("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ❌ 𝐄𝐫𝐫𝐨𝐫 𝐨𝐜𝐜𝐮𝐫𝐫𝐞𝐝 𝐰𝐡𝐢𝐥𝐞 𝐟𝐞𝐭𝐜𝐡𝐢𝐧𝐠 𝐟𝐫𝐢𝐞𝐧𝐝 𝐫𝐞𝐪𝐮𝐞𝐬𝐭𝐬.\n╰──────────────╯", event.threadID);
     }
   }
 };

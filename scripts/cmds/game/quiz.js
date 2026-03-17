@@ -56,7 +56,7 @@ module.exports = {
       );
     } catch (err) {
       console.error(err);
-      api.sendMessage("❌ কুইজ ডাটা আনতে সমস্যা হয়েছে!", event.threadID, event.messageID);
+      api.sendMessage("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ❌ কুইজ ডাটা আনতে সমস্যা হয়েছে!\n╰──────────────╯", event.threadID, event.messageID);
     }
   },
 
@@ -65,10 +65,10 @@ module.exports = {
     const reply = event.body?.trim().toUpperCase();
 
     if (event.senderID !== author)
-      return api.sendMessage("⚠️ এটা তোমার কুইজ না!", event.threadID, event.messageID);
+      return api.sendMessage("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ⚠️ এটা তোমার কুইজ না!\n╰──────────────╯", event.threadID, event.messageID);
 
     if (!reply || !["A", "B", "C", "D"].includes(reply))
-      return api.sendMessage("❌ Reply দাও শুধু A, B, C বা D দিয়ে!", event.threadID, event.messageID);
+      return api.sendMessage("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ❌ Reply দাও শুধু A, B, C বা D দিয়ে!\n╰──────────────╯", event.threadID, event.messageID);
 
     const selectedText =
       reply === "A" ? options.a :

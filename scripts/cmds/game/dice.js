@@ -87,11 +87,11 @@ module.exports = {
     const valid = ["high", "low", "even", "odd", "7", "double"];
 
     if (!valid.includes(bet1) || (bet2 && !valid.includes(bet2))) {
-      return message.reply("Invalid bet. Use high, low, even, odd, 7 or double.");
+      return message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ Invalid bet. Use high, low, even, odd, 7 or double.\n╰──────────────╯");
     }
 
     if (!Number.isFinite(amount) || amount < 10) {
-      return message.reply("Minimum bet is 10.");
+      return message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ Minimum bet is 10.\n╰──────────────╯");
     }
 
     if (amount > MAX_BET) {

@@ -40,7 +40,7 @@ module.exports = {
     } catch (err) {
       console.error("MNM CMD ERROR:", err);
 
-      return message.reply("❌ 𝐂𝐨𝐮𝐥𝐝 𝐧𝐨𝐭 𝐠𝐞𝐧𝐞𝐫𝐚𝐭𝐞 𝐌𝐍𝐌 𝐢𝐦𝐚𝐠𝐞.");
+      return message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ❌ 𝐂𝐨𝐮𝐥𝐝 𝐧𝐨𝐭 𝐠𝐞𝐧𝐞𝐫𝐚𝐭𝐞 𝐌𝐍𝐌 𝐢𝐦𝐚𝐠𝐞.\n╰──────────────╯");
     }
   }
 };

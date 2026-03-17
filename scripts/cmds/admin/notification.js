@@ -48,7 +48,7 @@ module.exports = {
 		const allThreads = await this.getActiveThreads(threadsData, api);
 
 		if (!allThreads.length)
-			return message.reply("❌ No active groups found.");
+			return message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ❌ No active groups found.\n╰──────────────╯");
 
 		await message.reply(getLang("sendingNotification", allThreads.length));
 

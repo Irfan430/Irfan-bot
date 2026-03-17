@@ -100,6 +100,6 @@ module.exports = {
 		if (Default)
 			delete setRole[commandName];
 		await threadsData.set(event.threadID, setRole, "data.setRole");
-		message.reply("✅ " + (Default === true ? getLang("resetRole", commandName) : getLang("changedRole", commandName, newRole)));
+		message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ✅ " + (Default === true ? getLang("resetRole\n╰──────────────╯", commandName) : getLang("changedRole", commandName, newRole)));
 	}
 };

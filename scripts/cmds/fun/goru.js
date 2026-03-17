@@ -24,11 +24,11 @@ module.exports = {
     }
 
     if (!targetID) {
-      return message.reply("❗ Tag or reply to someone to turn them into a goru!");
+      return message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ❗ Tag or reply to someone to turn them into a goru!\n╰──────────────╯");
     }
 
     if (targetID === event.senderID) {
-      return message.reply("❗ Bro, why would you cow yourself?");
+      return message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ❗ Bro, why would you cow yourself?\n╰──────────────╯");
     }
 
     const baseFolder = path.join(__dirname, "goru_cache");
@@ -97,7 +97,7 @@ module.exports = {
       );
     } catch (err) {
       console.error("❌ Goru Command Error:", err);
-      return message.reply("⚠️ সমস্যা হইসে ভাই! আবার try করো।");
+      return message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ⚠️ সমস্যা হইসে ভাই! আবার try করো।\n╰──────────────╯");
     }
   },
 };

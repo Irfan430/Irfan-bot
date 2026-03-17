@@ -64,7 +64,7 @@ module.exports = {
 			process.exit(2);
 		} catch (err) {
 			console.log("Restart command error:", err.message);
-			await message.reply("❌ | Restart failed!");
+			await message.reply("╭─── 𝐄𝐑𝐑𝐎𝐑 ───╮\n│ ❌ | Restart failed!\n╰──────────────╯");
 		}
 	}
 };

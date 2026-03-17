@@ -74,7 +74,7 @@ module.exports = {
 
     } catch (err) {
       console.error("BATSLAP ERROR:", err);
-      message.reply("❌ Batslap effect failed.");
+      message.reply("╭─── 𝐄𝐑𝐑𝐎𝐑 ───╮\n│ ❌ Batslap effect failed.\n╰──────────────╯");
     }
   }
 };

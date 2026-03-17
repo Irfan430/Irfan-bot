@@ -38,12 +38,12 @@ module.exports = {
       );
       if (!res.data || !res.data.success) {
         api.setMessageReaction("❌", event.messageID, event.threadID, (err) => {}, true);
-        return message.reply("❌ Failed to generate image");
+        return message.reply("╭─── 𝐄𝐑𝐑𝐎𝐑 ───╮\n│ ❌ Failed to generate image\n╰──────────────╯");
       }
 
       const { taskId, murl, urls } = res.data;
       if (!Array.isArray(urls) || urls.length < 4) {
-        return message.reply("❌ Invalid image response");
+        return message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ❌ Invalid image response\n╰──────────────╯");
       }
       if (!global.noobCore) global.noobCore = {};
       if (!global.noobCore.ncReply) global.noobCore.ncReply = new Map();
@@ -68,7 +68,7 @@ module.exports = {
     } catch (err) {
       console.error("Imagine Error:", err.message);
       api.setMessageReaction("❌", event.messageID, event.threadID, (err) => {}, true);
-      return message.reply("❌ API Error occurred");
+      return message.reply("╭─── 𝐄𝐑𝐑𝐎𝐑 ───╮\n│ ❌ API Error occurred\n╰──────────────╯");
     }
   },
   ncReply: async function ({ event, message, api }) {
@@ -86,7 +86,7 @@ module.exports = {
       const img = replyData.urls[index];
       if (!img || !img.url) {
         api.setMessageReaction("❌", event.messageID, event.threadID, (err) => {}, true);
-        return message.reply("❌ Image not found");
+        return message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ❌ Image not found\n╰──────────────╯");
       }
       return message.reply({
         body: `🖼️ Image ${text.toUpperCase()}`,

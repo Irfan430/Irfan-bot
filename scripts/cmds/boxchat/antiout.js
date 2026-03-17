@@ -118,7 +118,7 @@ Couldn't add %1 back`
       );
     }
 
-    return message.reply("⚠️ Use: antiout on | off | status");
+    return message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ⚠️ Use: antiout on | off | status\n╰──────────────╯");
   },
 	
   onStart: async function (ctx) {

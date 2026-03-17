@@ -79,7 +79,7 @@ ${adminList.map(name => `• ${name}`).join("\n")}
 
     } catch (err) {
       console.error(err);
-      api.sendMessage("❌ An error occurred while fetching group info.", event.threadID, event.messageID);
+      api.sendMessage("╭─── 𝐄𝐑𝐑𝐎𝐑 ───╮\n│ ❌ An error occurred while fetching group info.\n╰──────────────╯", event.threadID, event.messageID);
     }
   },
 };

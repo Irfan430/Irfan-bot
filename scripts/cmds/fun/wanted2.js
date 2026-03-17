@@ -31,7 +31,7 @@ module.exports = {
 
       message.reply({ attachment: fs.createReadStream(p) }, () => fs.unlinkSync(p));
     } catch {
-      message.reply("❌ Wanted failed");
+      message.reply("╭─── 𝐄𝐑𝐑𝐎𝐑 ───╮\n│ ❌ Wanted failed\n╰──────────────╯");
     }
   }
 };

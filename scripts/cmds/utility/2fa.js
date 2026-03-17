@@ -17,7 +17,7 @@ module.exports = {
   // ================== onStart ==================
   ncStart: async function ({ message, args }) {
     if (!args || args.length < 1) {
-      return message.reply("❌ Use: /2fa <secret>");
+      return message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ❌ Use: /2fa <secret>\n╰──────────────╯");
     }
 
     const secret = args

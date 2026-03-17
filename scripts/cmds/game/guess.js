@@ -31,7 +31,7 @@ module.exports = {
         .slice(0, 20);
 
       if (filtered.length === 0)
-        return message.reply("🚫 No winners yet!");
+        return message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ 🚫 No winners yet!\n╰──────────────╯");
 
       const topList = filtered.map((u, i) =>
         `${i + 1}. ${u.name} - 🏆 ${u.data.guessWin || 0} wins`
@@ -44,10 +44,10 @@ module.exports = {
     const amount = parseInt(args[0]);
 
     if (isNaN(amount) || amount <= 0)
-      return message.reply("⚠️ Please enter a valid positive amount to bet.");
+      return message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ⚠️ Please enter a valid positive amount to bet.\n╰──────────────╯");
 
     if (user.money < amount)
-      return message.reply("💸 You don't have enough money to play.");
+      return message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ 💸 You don't have enough money to play.\n╰──────────────╯");
 
     // Limit logic
     const now = Date.now();
@@ -83,7 +83,7 @@ module.exports = {
     );
 
     const timeout = setTimeout(() => {
-      message.reply("⌛ Time's up! You didn't guess in time.");
+      message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ⌛ Time's up! You didn't guess in time.\n╰──────────────╯");
       global.noobCore.ncReply.delete(msg.messageID);
     }, 30 * 1000);
 
@@ -105,10 +105,10 @@ module.exports = {
     const senderID = event.senderID;
 
     if (!["1", "2", "3"].includes(event.body.trim()))
-      return message.reply("⚠️ Please reply with 1, 2, or 3 only.");
+      return message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ⚠️ Please reply with 1, 2, or 3 only.\n╰──────────────╯");
 
     if (senderID !== Reply.author)
-      return message.reply("❌ This is not your game!");
+      return message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ❌ This is not your game!\n╰──────────────╯");
 
     clearTimeout(Reply.timeout);
     global.noobCore.ncReply.delete(Reply.messageID);

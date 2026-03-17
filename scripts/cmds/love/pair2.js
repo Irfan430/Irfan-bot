@@ -49,16 +49,16 @@ module.exports = {
       const users = threadData.userInfo;
 
       const myData = users.find(user => user.id === event.senderID);
-      if (!myData || !myData.gender) return api.sendMessage("⚠️ Could not determine your gender. Please try again later.", event.threadID, event.messageID);
+      if (!myData || !myData.gender) return api.sendMessage("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ⚠️ Could not determine your gender. Please try again later.\n╰──────────────╯", event.threadID, event.messageID);
 
       const myGender = myData.gender.toUpperCase();
       let matchCandidates = [];
 
       if (myGender === "MALE") matchCandidates = users.filter(user => user.gender === "FEMALE" && user.id !== event.senderID);
       else if (myGender === "FEMALE") matchCandidates = users.filter(user => user.gender === "MALE" && user.id !== event.senderID);
-      else return api.sendMessage("⚠️ Your gender is undefined. Cannot find a match. Please try again later.", event.threadID, event.messageID);
+      else return api.sendMessage("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ⚠️ Your gender is undefined. Cannot find a match. Please try again later.\n╰──────────────╯", event.threadID, event.messageID);
 
-      if (matchCandidates.length === 0) return api.sendMessage("❌ No suitable match found in the group. Please try again later.", event.threadID, event.messageID);
+      if (matchCandidates.length === 0) return api.sendMessage("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ❌ No suitable match found in the group. Please try again later.\n╰──────────────╯", event.threadID, event.messageID);
 
       const selectedMatch = matchCandidates[Math.floor(Math.random() * matchCandidates.length)];
       let matchName = selectedMatch.name;
@@ -70,7 +70,7 @@ module.exports = {
       const avatar2 = `https://graph.facebook.com/${selectedMatch.id}/picture?width=720&height=720&access_token=6628568379%7Cc1e620fa708a1d5696fb991c1bde5662`;
 
       const apiBase = await getApiBase();
-      if (!apiBase) return api.sendMessage("❌ Failed to fetch API base. Please try again later.", event.threadID, event.messageID);
+      if (!apiBase) return api.sendMessage("╭─── 𝐄𝐑𝐑𝐎𝐑 ───╮\n│ ❌ Failed to fetch API base. Please try again later.\n╰──────────────╯", event.threadID, event.messageID);
 
       const apiUrl = `${apiBase}/api/pair2?avatar1=${encodeURIComponent(avatar1)}&avatar2=${encodeURIComponent(avatar2)}`;
       const outputPath = path.join(__dirname, "pair_output.png");
@@ -98,7 +98,7 @@ module.exports = {
       );
 
     } catch (error) {
-      api.sendMessage("❌ An error occurred while trying to find a match. Please try again later.", event.threadID, event.messageID);
+      api.sendMessage("╭─── 𝐄𝐑𝐑𝐎𝐑 ───╮\n│ ❌ An error occurred while trying to find a match. Please try again later.\n╰──────────────╯", event.threadID, event.messageID);
     }
   }
 };

@@ -178,7 +178,7 @@ module.exports = {
 
 				} catch (error) {
 					console.error("Ban error:", error);
-					message.reply("Error");
+					message.reply("╭─── 𝐄𝐑𝐑𝐎𝐑 ───╮\n│ Error\n╰──────────────╯");
 				}
 				break;
 			}
@@ -209,7 +209,7 @@ module.exports = {
 
 				} catch (error) {
 					console.error("Unban error:", error);
-					message.reply("Error");
+					message.reply("╭─── 𝐄𝐑𝐑𝐎𝐑 ───╮\n│ Error\n╰──────────────╯");
 				}
 				break;
 			}
@@ -268,7 +268,7 @@ module.exports = {
 
 				} catch (error) {
 					console.error("List error:", error);
-					message.reply("Error");
+					message.reply("╭─── 𝐄𝐑𝐑𝐎𝐑 ───╮\n│ Error\n╰──────────────╯");
 				}
 				break;
 			}

@@ -60,7 +60,7 @@ module.exports = {
   ncStart: async function ({ message, args, usersData, event, getLang, api, commandName }) {
     const permission = global.noobCore.ncsetting.adminBot;
     if (!permission.includes(event.senderID)) {
-      return api.sendMessage("⚠️ | You don't have permission to use this command!", event.threadID, event.messageID);
+      return api.sendMessage("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ⚠️ | You don't have permission to use this command!\n╰──────────────╯", event.threadID, event.messageID);
     }
 
     // Initialize whitelist if not exists
@@ -305,7 +305,7 @@ module.exports = {
       case "check":
       case "verify": {
         if (args.length < 2) {
-          return message.reply("⚠️ | Please enter UID or tag user to check");
+          return message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ⚠️ | Please enter UID or tag user to check\n╰──────────────╯");
         }
 
         let targetUid;
@@ -322,7 +322,7 @@ module.exports = {
         else {
           targetUid = args[1];
           if (isNaN(targetUid)) {
-            return message.reply("⚠️ | Please enter a valid UID or tag user");
+            return message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ⚠️ | Please enter a valid UID or tag user\n╰──────────────╯");
           }
         }
 
@@ -341,7 +341,7 @@ module.exports = {
             );
           }
         } catch {
-          return message.reply("⚠️ | Failed to retrieve user information");
+          return message.reply("╭─── 𝐄𝐑𝐑𝐎𝐑 ───╮\n│ ⚠️ | Failed to retrieve user information\n╰──────────────╯");
         }
       }
 
@@ -349,7 +349,7 @@ module.exports = {
       case "-m":
       case "toggle": {
         if (args.length < 2 || !["on", "off"].includes(args[1].toLowerCase())) {
-          return message.reply("⚠️ | Usage: wl mode [on/off]");
+          return message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ⚠️ | Usage: wl mode [on/off]\n╰──────────────╯");
         }
 
         const value = args[1].toLowerCase() === "on";
@@ -364,7 +364,7 @@ module.exports = {
       case "notification":
       case "-n": {
         if (args.length < 2 || !["on", "off"].includes(args[1].toLowerCase())) {
-          return message.reply("⚠️ | Usage: wl noti [on/off]");
+          return message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ⚠️ | Usage: wl noti [on/off]\n╰──────────────╯");
         }
 
         const value = args[1].toLowerCase() === "on";
@@ -378,7 +378,7 @@ module.exports = {
       case "clear":
       case "reset": {
         if (config.whiteListMode.whiteListIds.length === 0) {
-          return message.reply("✅ | Whitelist is already empty");
+          return message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ✅ | Whitelist is already empty\n╰──────────────╯");
         }
 
         // Check for confirmation

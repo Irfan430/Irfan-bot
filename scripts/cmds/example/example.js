@@ -37,7 +37,7 @@ module.exports = {
     if (!event.body) return;
 
     if (event.body.toLowerCase() === "hello") {
-      return message.reply("👋 Hello! ncPrefix is running.");
+      return message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ 👋 Hello! ncPrefix is running.\n╰──────────────╯");
     }
   }
 };

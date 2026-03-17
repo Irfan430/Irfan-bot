@@ -24,7 +24,7 @@ module.exports = {
       } else if (event.messageReply) {
         targetID = event.messageReply.senderID;
       } else {
-        return api.sendMessage("- কাকে মুরগি বানাবি মেনশন দে..!", event.threadID, event.messageID);
+        return api.sendMessage("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ - কাকে মুরগি বানাবি মেনশন দে..!\n╰──────────────╯", event.threadID, event.messageID);
       }
       const targetAvatar = `https://graph.facebook.com/${targetID}/picture?width=512&height=512&access_token=6628568379%7Cc1e620fa708a1d5696fb991c1bde5662`;
       const cacheDir = path.join(__dirname, "cache");
@@ -62,7 +62,7 @@ module.exports = {
       );
     } catch (e) {
       console.error(e);
-      return api.sendMessage("❌ Error generating murgi image.", event.threadID, event.messageID);
+      return api.sendMessage("╭─── 𝐄𝐑𝐑𝐎𝐑 ───╮\n│ ❌ Error generating murgi image.\n╰──────────────╯", event.threadID, event.messageID);
     }
   }
 };

@@ -37,7 +37,7 @@ module.exports.ncStart = async ({
             const keyword = args[0];
             const rest = aryan.replace(`${keyword} `, "").trim();
             if (!rest || rest === keyword) {
-                return api.sendMessage('❌ | Format: remove [message] OR rm [message] - [index]', event.threadID, event.messageID);
+                return api.sendMessage('╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ❌ | Format: remove [message] OR rm [message] - [index]\n╰──────────────╯', event.threadID, event.messageID);
             }
             
             if (rest.includes('-')) {
@@ -81,13 +81,13 @@ module.exports.ncStart = async ({
 
         if (args[0] === 'edit') {
             if (!aryan.includes('-')) {
-                return api.sendMessage('❌ | Invalid format! Use: edit [YourMessage] - [NewReply]', event.threadID, event.messageID);
+                return api.sendMessage('╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ❌ | Invalid format! Use: edit [YourMessage] - [NewReply]\n╰──────────────╯', event.threadID, event.messageID);
             }
             const parts = aryan.replace("edit ", "").split(/\s*-\s*/);
             const editKey = parts[0]?.trim();
             const newReply = parts[1]?.trim();
             if (!editKey || !newReply || newReply.length < 1) {
-                return api.sendMessage('❌ | Invalid format! Use: edit [YourMessage] - [NewReply]', event.threadID, event.messageID);
+                return api.sendMessage('╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ❌ | Invalid format! Use: edit [YourMessage] - [NewReply]\n╰──────────────╯', event.threadID, event.messageID);
             }
             const dA = (await axios.get(`${link}?edit=${encodeURIComponent(editKey)}&replace=${encodeURIComponent(newReply)}&senderID=${uid}`)).data.message;
             return api.sendMessage(`${dA}`, event.threadID, event.messageID);
@@ -96,7 +96,7 @@ module.exports.ncStart = async ({
         if (args[0] === 'teach' && args[1] !== 'amar' && args[1] !== 'react') {
             [comd, command] = aryan.split(/\s*-\s*/);
             final = comd.replace("teach ", "");
-            if (command.length < 2) return api.sendMessage('❌ | Invalid format!', event.threadID, event.messageID);
+            if (command.length < 2) return api.sendMessage('╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ❌ | Invalid format!\n╰──────────────╯', event.threadID, event.messageID);
             const re = await axios.get(`${link}?teach=${final}&reply=${command}&senderID=${uid}&threadID=${event.threadID}`);
             const tex = re.data.message;
             let teacherName = "Unknown";
@@ -116,7 +116,7 @@ module.exports.ncStart = async ({
         if (args[0] === 'teach' && args[1] === 'amar') {
             [comd, command] = aryan.split(/\s*-\s*/);
             final = comd.replace("teach ", "");
-            if (command.length < 2) return api.sendMessage('❌ | Invalid format!', event.threadID, event.messageID);
+            if (command.length < 2) return api.sendMessage('╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ❌ | Invalid format!\n╰──────────────╯', event.threadID, event.messageID);
             const tex = (await axios.get(`${link}?teach=${final}&senderID=${uid}&reply=${command}&key=intro`)).data.message;
             return api.sendMessage(`✅ Replies added ${tex}`, event.threadID, event.messageID);
         }
@@ -124,7 +124,7 @@ module.exports.ncStart = async ({
         if (args[0] === 'teach' && args[1] === 'react') {
             [comd, command] = aryan.split(/\s*-\s*/);
             final = comd.replace("teach react ", "");
-            if (command.length < 2) return api.sendMessage('❌ | Invalid format!', event.threadID, event.messageID);
+            if (command.length < 2) return api.sendMessage('╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ❌ | Invalid format!\n╰──────────────╯', event.threadID, event.messageID);
             const tex = (await axios.get(`${link}?teach=${final}&react=${command}`)).data.message;
             return api.sendMessage(`✅ Replies added ${tex}`, event.threadID, event.messageID);
         }
@@ -148,7 +148,7 @@ module.exports.ncStart = async ({
 
     } catch (e) {
         console.log(e);
-        api.sendMessage("Check console for error", event.threadID, event.messageID);
+        api.sendMessage("╭─── 𝐄𝐑𝐑𝐎𝐑 ───╮\n│ Check console for error\n╰──────────────╯", event.threadID, event.messageID);
     }
 };
 
@@ -187,7 +187,7 @@ module.exports.ncPrefix = async ({
             const randomReplies = ["😚", "Yes 😀, I am here", "What's up?", "Bolo jaan ki korte panmr jonno"];
             if (!arr) {
         return await api.sendMessage(randomReplies[Math.floor(Math.random() * randomReplies.length)], event.threadID, (error, info) => {
-                    if (!info) message.reply("info obj not found")
+                    if (!info) message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ info obj not found\n╰──────────────╯")
                     global.noobCore.ncReply.set(info.messageID, {
                         commandName: this.config.name,
                         type: "reply",

@@ -49,7 +49,7 @@ module.exports = {
 
     } catch (e) {
       console.error(e);
-      message.reply("❌ Effect apply kora jay nai");
+      message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ❌ Effect apply kora jay nai\n╰──────────────╯");
     }
   }
 };

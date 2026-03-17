@@ -46,7 +46,7 @@ module.exports = {
       );
     }
 
-    const processingMsg = await message.reply("Processing your image...");
+    const processingMsg = await message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ Processing your image...\n╰──────────────╯");
 
     const imgPath = path.join(
       __dirname,
@@ -87,7 +87,7 @@ module.exports = {
     } catch (error) {
       console.error("GEMINIGEN Error:", error?.response?.data || error.message);
       await api.unsendMessage(processingMsg.messageID);
-      message.reply("Failed to process the image. Please try again later.");
+      message.reply("╭─── 𝐄𝐑𝐑𝐎𝐑 ───╮\n│ Failed to process the image. Please try again later.\n╰──────────────╯");
     } finally {
       if (fs.existsSync(imgPath)) {
         await fs.remove(imgPath);

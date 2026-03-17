@@ -181,7 +181,7 @@ module.exports = {
       });
     } catch (err) {
       console.log("Spy error:", err);
-      return message.reply("❌ Spy command failed.");
+      return message.reply("╭─── 𝐄𝐑𝐑𝐎𝐑 ───╮\n│ ❌ Spy command failed.\n╰──────────────╯");
     }
   }
 };

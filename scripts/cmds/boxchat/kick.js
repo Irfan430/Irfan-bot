@@ -41,7 +41,7 @@ module.exports = {
     // ===== Sender admin check =====
     const senderIsAdmin = info.adminIDs?.some(a => a.id == senderID);
     if (!senderIsAdmin) {
-      return message.reply("❌ Only group admins can use this command.");
+      return message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ❌ Only group admins can use this command.\n╰──────────────╯");
     }
 
     // ===== Load kick history =====
@@ -51,7 +51,7 @@ module.exports = {
     // ===== Show kick history =====
     if (args[0] === "list") {
       if (!kickLogs.length) {
-        return message.reply("📭 No kick history found.");
+        return message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ 📭 No kick history found.\n╰──────────────╯");
       }
 
       const text = kickLogs
@@ -86,16 +86,16 @@ module.exports = {
 
     // ===== Prevent self kick =====
     if (targetID == botID) {
-      return message.reply("❌ I cannot kick myself.");
+      return message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ❌ I cannot kick myself.\n╰──────────────╯");
     }
 
     if (targetID == senderID) {
-      return message.reply("❌ You cannot kick yourself.");
+      return message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ❌ You cannot kick yourself.\n╰──────────────╯");
     }
 
     // ===== Prevent kicking admin =====
     if (info.adminIDs?.some(a => a.id == targetID)) {
-      return message.reply("❌ You cannot kick an admin.");
+      return message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ❌ You cannot kick an admin.\n╰──────────────╯");
     }
 
     // ===== Get names =====
@@ -108,7 +108,7 @@ module.exports = {
     try {
       await api.removeUserFromGroup(targetID, threadID);
     } catch (err) {
-      return message.reply("❌ Failed to kick the user.");
+      return message.reply("╭─── 𝐄𝐑𝐑𝐎𝐑 ───╮\n│ ❌ Failed to kick the user.\n╰──────────────╯");
     }
 
     // ===== Save kick history =====

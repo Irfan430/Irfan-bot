@@ -19,7 +19,7 @@ module.exports = {
 
   ncStart: async function ({ api, event, args, message }) {
     if (!args[0])
-      return message.reply("❄️ Please provide a song name or YouTube link.");
+      return message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ❄️ Please provide a song name or YouTube link.\n╰──────────────╯");
 
     await api.setMessageReaction("🎧", event.messageID, event.threadID);
 
@@ -38,7 +38,7 @@ module.exports = {
         const search = await yts(args.join(" "));
         if (!search.videos.length) {
           await api.unsendMessage(waitMsg.messageID);
-          return message.reply("❌ No results found.");
+          return message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ❌ No results found.\n╰──────────────╯");
         }
         video = search.videos[0];
       }
@@ -49,7 +49,7 @@ module.exports = {
 
       if (!data.success || !data.url) {
         await api.unsendMessage(waitMsg.messageID);
-        return message.reply("❌ Download failed.");
+        return message.reply("╭─── 𝐄𝐑𝐑𝐎𝐑 ───╮\n│ ❌ Download failed.\n╰──────────────╯");
       }
 
       const audio = await axios.get(data.url, { responseType: "arraybuffer" });
@@ -68,7 +68,7 @@ module.exports = {
 
     } catch (err) {
       try { await api.unsendMessage(waitMsg.messageID); } catch {}
-      message.reply("⚠️ Error while downloading song.");
+      message.reply("╭─── 𝐄𝐑𝐑𝐎𝐑 ───╮\n│ ⚠️ Error while downloading song.\n╰──────────────╯");
     }
   },
 

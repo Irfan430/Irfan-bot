@@ -112,7 +112,7 @@ ${top.map((u, i) =>
     /* ===== BET ===== */
     const bet = parseBet(args[0]);
     if (!bet || isNaN(bet) || bet <= 0)
-      return api.sendMessage("❌ Invalid bet amount.", threadID);
+      return api.sendMessage("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ❌ Invalid bet amount.\n╰──────────────╯", threadID);
 
     if (bet > mbet)
       return api.sendMessage(`🚫 Max bet: ${fm(mbet)}`, threadID);
@@ -124,7 +124,7 @@ ${top.map((u, i) =>
       );
 
     if (!user.money || user.money < bet)
-      return api.sendMessage("💸 Not enough balance.", threadID);
+      return api.sendMessage("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ 💸 Not enough balance.\n╰──────────────╯", threadID);
 
     /* ===== GAME ===== */
     const colors = [

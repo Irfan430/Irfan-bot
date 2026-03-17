@@ -275,7 +275,7 @@ ${stats.lastSpins?.slice(-5).map((spin, i) =>
     // ========== SPIN ANIMATION ==========
     let spinMessage;
     try {
-      spinMessage = await api.sendMessage("🎡 Initializing Premium Wheel...", threadID);
+      spinMessage = await api.sendMessage("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ 🎡 Initializing Premium Wheel...\n╰──────────────╯", threadID);
     } catch (e) {
       console.error("Failed to send initial message:", e);
       return;
@@ -438,7 +438,7 @@ ${stats.lastSpins?.slice(-5).map((spin, i) =>
         );
       } else if (totalWinnings > bet * 3) {
         await new Promise(resolve => setTimeout(resolve, 1000));
-        await api.sendMessage("🎉 INCREDIBLE WIN! THE WHEEL FAVORS YOU! 🎉", threadID);
+        await api.sendMessage("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ 🎉 INCREDIBLE WIN! THE WHEEL FAVORS YOU! 🎉\n╰──────────────╯", threadID);
       }
     } catch (e) {
       console.error("Failed to edit message:", e);

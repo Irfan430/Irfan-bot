@@ -26,13 +26,13 @@ module.exports = {
       const fs = require("fs-extra");
 
       if (!event.messageReply || !event.messageReply.attachments || event.messageReply.attachments.length === 0) {
-        api.sendMessage("Please reply to a video message to convert it to audio.", event.threadID, event.messageID);
+        api.sendMessage("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ Please reply to a video message to convert it to audio.\n╰──────────────╯", event.threadID, event.messageID);
         return;
       }
 
       const att = event.messageReply.attachments[0];
       if (att.type !== "video") {
-        api.sendMessage("The replied content must be a video.", event.threadID, event.messageID);
+        api.sendMessage("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ The replied content must be a video.\n╰──────────────╯", event.threadID, event.messageID);
         return;
       }
 

@@ -138,7 +138,7 @@ ${line}`
     /* ===== BET ===== */
     const bet = pbet(args[0]);
     if (!bet || isNaN(bet))
-      return message.reply("❌ Invalid bet amount!");
+      return message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ❌ Invalid bet amount!\n╰──────────────╯");
 
     if (bet > mbet)
       return message.reply(`🚫 Max bet: ${fm(mbet)}`);
@@ -147,7 +147,7 @@ ${line}`
       return message.reply(`⛔ Daily limit reached (${dailyLimit})`);
 
     if (!user.money || user.money < bet)
-      return message.reply("💸 Not enough balance!");
+      return message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ 💸 Not enough balance!\n╰──────────────╯");
 
     await usersData.set(senderID, { money: user.money - bet });
 

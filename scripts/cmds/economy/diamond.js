@@ -158,7 +158,7 @@ module.exports = {
     // ➕ ADD COMMAND (ADMIN ONLY)
     if (args[0].toLowerCase() === "add") {
       if (!adminIDs.includes(senderID))
-        return message.reply("❌ Permission denied.");
+        return message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ❌ Permission denied.\n╰──────────────╯");
 
       const { targetUID, amount } = getTargetAndAmount();
 
@@ -192,17 +192,17 @@ module.exports = {
     // ➖ DELETE COMMAND (ADMIN ONLY)
     if (args[0].toLowerCase() === "delete") {
       if (!adminIDs.includes(senderID))
-        return message.reply("❌ Permission denied.");
+        return message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ❌ Permission denied.\n╰──────────────╯");
 
       const { targetUID, amount } = getTargetAndAmount();
 
       if (!targetUID || !amount || amount <= 0)
-        return message.reply("❌ Invalid user or amount.");
+        return message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ❌ Invalid user or amount.\n╰──────────────╯");
 
       const currentDiamond = getDiamond(targetUID);
       
       if (currentDiamond < amount)
-        return message.reply("❌ Not enough diamonds.");
+        return message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ❌ Not enough diamonds.\n╰──────────────╯");
 
       const newDiamond = currentDiamond - amount;
       setDiamond(targetUID, newDiamond);
@@ -223,14 +223,14 @@ module.exports = {
       const { targetUID, amount } = getTargetAndAmount();
 
       if (!targetUID || !amount || amount <= 0)
-        return message.reply("❌ Invalid user or amount.");
+        return message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ❌ Invalid user or amount.\n╰──────────────╯");
 
       if (targetUID === senderID)
-        return message.reply("❌ Can't transfer to yourself.");
+        return message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ❌ Can't transfer to yourself.\n╰──────────────╯");
 
       const senderDiamond = getDiamond(senderID);
       if (senderDiamond < amount)
-        return message.reply("❌ Not enough diamonds.");
+        return message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ❌ Not enough diamonds.\n╰──────────────╯");
 
       const receiverDiamond = getDiamond(targetUID);
 

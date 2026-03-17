@@ -159,7 +159,7 @@ module.exports = {
 
  if (!res.data?.status || !res.data.result_url) {
  await api.unsendMessage(loadingMsg.messageID);
- return message.reply("❌ Oops! Something went wrong. Please try again later.");
+ return message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ❌ Oops! Something went wrong. Please try again later.\n╰──────────────╯");
  }
 
  await api.unsendMessage(loadingMsg.messageID);
@@ -169,7 +169,7 @@ module.exports = {
  });
  } catch (e) {
  await api.unsendMessage(loadingMsg.messageID);
- return message.reply("❌ Oops! Something went wrong. Please try again later.");
+ return message.reply("╭─── 𝐈𝐍𝐅𝐎 ───╮\n│ ❌ Oops! Something went wrong. Please try again later.\n╰──────────────╯");
  }
  }
 };
