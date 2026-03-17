@@ -1272,6 +1272,8 @@ function loginHelper(appState, Cookie, email, password, globalOptions, callback)
         api.setStoryReaction = require("../src/api/messaging/setStoryReaction")(defaultFuncs, api, ctxMain);
         api.getNewsFeed = require("../src/api/messaging/getNewsFeed")(defaultFuncs, api, ctxMain);
         api.setPostComment = require("../src/api/messaging/setPostComment")(defaultFuncs, api, ctxMain);
+        api.getThreadMedia = require("../src/api/messaging/getThreadMedia")(defaultFuncs, api, ctxMain);
+        api.getGroupPendingMembers = require("../src/api/messaging/getGroupPendingMembers")(defaultFuncs, api, ctxMain);
         if (api.refreshFb_dtsg) {
           setInterval(function () {
             api.refreshFb_dtsg().then(function () {
