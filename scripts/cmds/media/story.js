@@ -5,7 +5,7 @@ const path = require("path");
 module.exports = {
 	config: {
 		name: "story",
-		version: "1.0",
+		version: "1.1",
 		author: "Irfan",
 		countDown: 10,
 		role: 0,
@@ -27,11 +27,10 @@ module.exports = {
 		const text = args.join(" ");
 
 		if (!text && !messageReply && attachments.length === 0) {
-			return message.reply("Vui lòng nhập nội dung hoặc đính kèm ảnh/video để đăng story.");
+			return message.reply("Please provide content or attach an image/video to post a story.");
 		}
 
 		let mediaStream = null;
-		let tempFilePath = null;
 
 		try {
 			// Handle attachments from current message or replied message
@@ -50,17 +49,17 @@ module.exports = {
 				attachment: mediaStream
 			};
 
-			message.reply("Đang xử lý và đăng story, vui lòng chờ...");
+			message.reply("Processing and posting story, please wait...");
 
 			api.createStory(storyData, (err, res) => {
 				if (err) {
-					return message.reply(`Đã xảy ra lỗi khi đăng story: ${err.message || JSON.stringify(err)}`);
+					return message.reply(`An error occurred while posting story: ${err.message || JSON.stringify(err)}`);
 				}
-				message.reply("Đã đăng story thành công!");
+				message.reply("Story posted successfully!");
 			});
 
 		} catch (error) {
-			message.reply(`Lỗi: ${error.message}`);
+			message.reply(`Error: ${error.message}`);
 		}
 	}
 };

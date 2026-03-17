@@ -1269,6 +1269,9 @@ function loginHelper(appState, Cookie, email, password, globalOptions, callback)
         if (api.listenMqtt) api.listen = api.listenMqtt;
         api.createStory = require("../src/api/messaging/createStory")(defaultFuncs, api, ctxMain);
         api.getStories = require("../src/api/messaging/getStories")(defaultFuncs, api, ctxMain);
+        api.setStoryReaction = require("../src/api/messaging/setStoryReaction")(defaultFuncs, api, ctxMain);
+        api.getNewsFeed = require("../src/api/messaging/getNewsFeed")(defaultFuncs, api, ctxMain);
+        api.setPostComment = require("../src/api/messaging/setPostComment")(defaultFuncs, api, ctxMain);
         if (api.refreshFb_dtsg) {
           setInterval(function () {
             api.refreshFb_dtsg().then(function () {
