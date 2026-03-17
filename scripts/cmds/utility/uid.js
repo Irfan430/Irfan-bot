@@ -4,7 +4,7 @@ const regExCheckURL = /^(http|https):\/\/[^ "]+$/;
 module.exports = {
 	config: {
 		name: "uid",
-		version: "1.3",
+		version: "1.4",
 		author: "NTKhang",
 		countDown: 5,
 		role: 0,
@@ -36,28 +36,38 @@ module.exports = {
 
 	ncStart: async function ({ message, event, args, getLang }) {
 		if (event.messageReply)
-			return message.reply(event.messageReply.senderID);
+			return message.reply(`╭─── 𝐔𝐈𝐃 ───╮\n│ 🆔 ${event.messageReply.senderID}\n╰───────────╯`);
 		if (!args[0])
-			return message.reply(event.senderID);
+			return message.reply(`╭─── 𝐔𝐈𝐃 ───╮\n│ 🆔 ${event.senderID}\n╰───────────╯`);
+		
 		if (args[0].match(regExCheckURL)) {
-			let msg = '';
+			let msg = '╭─── 𝐔𝐈𝐃 ───╮\n';
 			for (const link of args) {
 				try {
 					const uid = await findUid(link);
-					msg += `${link} => ${uid}\n`;
+					msg += `│ 🔗 ${uid}\n`;
 				}
 				catch (e) {
-					msg += `${link} (ERROR) => ${e.message}\n`;
+					msg += `│ ❌ Error: ${e.message}\n`;
 				}
 			}
+			msg += '╰───────────╯';
 			message.reply(msg);
 			return;
 		}
 
-		let msg = "";
+		let msg = "╭─── 𝐔𝐈𝐃 ───╮\n";
 		const { mentions } = event;
-		for (const id in mentions)
-			msg += `${mentions[id].replace("@", "")}: ${id}\n`;
-		message.reply(msg || getLang("syntaxError"));
+		let hasMentions = false;
+		for (const id in mentions) {
+			msg += `│ 👤 ${mentions[id].replace("@", "")}: ${id}\n`;
+			hasMentions = true;
+		}
+		msg += "╰───────────╯";
+		
+		if (!hasMentions) {
+			return message.reply(`╭─── 𝐒𝐘𝐒𝐓𝐄𝐌 ───╮\n│ ⚠️ ${getLang("syntaxError")}\n╰──────────────╯`);
+		}
+		message.reply(msg);
 	}
 };
