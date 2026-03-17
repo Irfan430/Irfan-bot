@@ -1,7 +1,7 @@
 module.exports = {
 	config: {
 		name: "autoUpdateThreadInfo",
-		version: "1.4",
+		version: "1.5",
 		author: "NTKhang",
 		category: "events"
 	},
@@ -12,26 +12,32 @@ module.exports = {
 			return;
 		const { threadID, logMessageData, logMessageType } = event;
 		const threadInfo = await threadsData.get(event.threadID);
-		// eslint-disable-next-line prefer-const
+		if (!threadInfo) return;
+		
 		let { members, adminIDs } = threadInfo;
+		if (!members) members = [];
+		if (!adminIDs) adminIDs = [];
+
 		switch (logMessageType) {
 			case "log:subscribe":
 				return async function () {
 					const { addedParticipants } = event.logMessageData;
 					const threadInfo_Fca = await api.getThreadInfo(threadID);
+					if (!threadInfo_Fca) return;
+					
 					threadsData.refreshInfo(threadID, threadInfo_Fca);
 
 					for (const user of addedParticipants) {
 						let oldData = members.find(member => member.userID === user.userFbId);
-						const isOldMember = oldData ? true : false;
+						const isOldMember = !!oldData;
 						oldData = oldData || {};
 						const { userInfo, nicknames } = threadInfo_Fca;
 
 						const newData = {
 							userID: user.userFbId,
 							name: user.fullName,
-							gender: userInfo.find(u => u.id == user.userFbId)?.gender,
-							nickname: nicknames[user.userFbId] || null,
+							gender: (userInfo && Array.isArray(userInfo)) ? userInfo.find(u => u.id == user.userFbId)?.gender : null,
+							nickname: (nicknames && nicknames[user.userFbId]) || null,
 							inGroup: true,
 							count: oldData.count || 0
 						};
@@ -40,7 +46,7 @@ module.exports = {
 							members.push(newData);
 						else {
 							const index = members.findIndex(member => member.userID === user.userFbId);
-							members[index] = newData;
+							if (index !== -1) members[index] = newData;
 						}
 					}
 					await threadsData.set(threadID, members, "members");
@@ -94,6 +100,5 @@ module.exports = {
 			default:
 				return null;
 		}
-
 	}
 };
