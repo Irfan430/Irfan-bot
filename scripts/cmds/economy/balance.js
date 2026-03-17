@@ -297,8 +297,8 @@ module.exports = {
     config: {
         name: "balance",
         aliases: ["bal"],
-        version: "2.0.0",
-        author: "NoobCore Team", // author Fahad Islam
+        version: "2.1.0",
+        author: "NoobCore Team",
         team: "NoobCore",
         countDown: 3,
         role: 0,
@@ -309,23 +309,7 @@ module.exports = {
             en: "Check your balance, transfer money, view leaderboard, and get daily bonuses with premium visual cards and secure transactions."
         },
         guide: {
-            en: `
-╭──「 Balance Commands 」───
-├ {pn} - Check your balance
-├ {pn} @user - Check someone's balance
-├ {pn} transfer @user amount - Send money
-├ {pn} top [page] - View leaderboard
-├ {pn} daily - Claim daily bonus
-├ {pn} rank - Check your wealth rank
-╰─────────────────────
-
-💡 Examples:
-• !balance
-• !bal @JohnDoe
-• !bal transfer @JohnDoe 1000
-• !bal top 2
-• !bal daily
-            `.trim()
+            en: `╭─── 𝐄𝐂𝐎𝐍𝐎𝐌𝐘 ───╮\n│ 💰 {pn} - Check balance\n│ 👤 {pn} @user - Check someone\n│ 💸 {pn} transfer @user <amt>\n│ 🏆 {pn} top [page]\n│ 🎁 {pn} daily - Claim bonus\n╰────────────────╯`
         }
     },
 
@@ -333,549 +317,74 @@ module.exports = {
         const { senderID, mentions, messageReply, threadID } = event;
         const command = args[0]?.toLowerCase();
         
-        // ========== DAILY BONUS COMMAND ==========
-        if (command === "daily") {
-            const userData = await usersData.get(senderID);
-            const now = Date.now();
-            const lastDaily = userData.lastDaily || 0;
-            const dailyStreak = userData.dailyStreak || 0;
-            
-            // Check if already claimed today
-            const hoursSinceLast = (now - lastDaily) / (1000 * 60 * 60);
-            
-            if (hoursSinceLast < CONFIG.dailyBonus.resetHours) {
-                const hoursLeft = Math.ceil(CONFIG.dailyBonus.resetHours - hoursSinceLast);
-                return message.reply(
-                    `⏰ You've already claimed your daily bonus today!\n` +
-                    `🔄 Next claim available in ${hoursLeft} hours\n` +
-                    `🔥 Current streak: ${dailyStreak} days`
-                );
-            }
-            
-            // Calculate bonus
-            const baseBonus = CONFIG.dailyBonus.baseAmount;
-            const streakBonus = Math.min(
-                dailyStreak * CONFIG.dailyBonus.streakMultiplier * baseBonus,
-                baseBonus * 5
-            );
-            const totalBonus = Math.round(baseBonus + streakBonus);
-            
-            // Determine if streak continues or resets
-            const newStreak = hoursSinceLast < CONFIG.dailyBonus.resetHours * 2 ? 
-                dailyStreak + 1 : 1;
-            
-            // Update user data
-            await usersData.set(senderID, {
-                money: (userData.money || 0) + totalBonus,
-                lastDaily: now,
-                dailyStreak: newStreak
-            });
-            
-            // Send success message
-            const bonusMessage = `
-🎉 DAILY BONUS CLAIMED! 🎉
-
-💰 Base Bonus: ${formatMoney(baseBonus)}
-🔥 Streak Bonus: ${formatMoney(streakBonus)}
-🎁 Total Received: ${formatMoney(totalBonus)}
-
-📈 New Streak: ${newStreak} day${newStreak !== 1 ? 's' : ''}
-💸 New Balance: ${formatMoney((userData.money || 0) + totalBonus)}
-
-💡 Keep your streak alive for bigger bonuses!
-            `.trim();
-            
-            return message.reply(bonusMessage);
-        }
-        
-        // ========== RANK COMMAND ==========
-        if (command === "rank") {
-            const userData = await usersData.get(senderID);
-            const balance = userData.money || 0;
-            const tierInfo = getTierInfo(balance);
-            
-            const allUsers = await usersData.getAll();
-            const sortedUsers = allUsers.sort((a, b) => (b.money || 0) - (a.money || 0));
-            const globalRank = sortedUsers.findIndex(user => user.userID === senderID) + 1;
-            const totalUsers = sortedUsers.length;
-            
-            const rankMessage = `
-🏆 WEALTH RANK INFORMATION
-
-👤 Player: ${userData.name || "User"}
-💰 Balance: ${formatMoney(balance)}
-🥇 Tier: ${tierInfo.badge} ${tierInfo.name}
-📊 Global Rank: #${globalRank} of ${totalUsers}
-📈 Progress to Next Tier: ${tierInfo.progress.toFixed(1)}%
-
-💡 Next Tier: ${tierInfo.nextTier ? `${tierInfo.nextTier.badge} ${tierInfo.nextTier.name}` : 'MAX TIER'}
-🎯 Needed: ${tierInfo.nextTier ? formatMoney(tierInfo.nextTier.min - balance) : 'N/A'}
-
-💎 Tier Multiplier: ${tierInfo.multiplier}x
-            `.trim();
-            
-            return message.reply(rankMessage);
-        }
-        
-        // ========== LEADERBOARD COMMAND ==========
-        if (command === "top") {
-            const page = parseInt(args[1]) || 1;
-            const perPage = 10;
-            
-            const allUsers = await usersData.getAll();
-            const wealthyUsers = allUsers
-                .filter(user => user.money > 0)
-                .sort((a, b) => (b.money || 0) - (a.money || 0));
-            
-            const totalPages = Math.ceil(wealthyUsers.length / perPage);
-            const startIndex = (page - 1) * perPage;
-            const endIndex = startIndex + perPage;
-            const pageUsers = wealthyUsers.slice(startIndex, endIndex);
-            
-            if (pageUsers.length === 0) {
-                return message.reply("📭 No users found on this page!");
-            }
-            
-            let leaderboardText = `🏆 WEALTH LEADERBOARD (Page ${page}/${totalPages}) 🏆\n\n`;
-            
-            pageUsers.forEach((user, index) => {
-                const globalRank = startIndex + index + 1;
-                const rankEmoji = ["🥇", "🥈", "🥉"][globalRank - 1] || `🏅`;
-                const name = user.name || "Unknown User";
-                const money = user.money || 0;
-                const tier = getTierInfo(money);
-                
-                leaderboardText += `${rankEmoji} #${globalRank}. ${name}\n`;
-                leaderboardText += `   💰 ${formatMoney(money)} | ${tier.badge} ${tier.name}\n`;
-                leaderboardText += `   ───────────────\n`;
-            });
-            
-            // Add navigation info
-            if (totalPages > 1) {
-                leaderboardText += `\n📖 Use: !balance top <page> to navigate`;
-                leaderboardText += `\n👤 Your position on leaderboard: #${wealthyUsers.findIndex(u => u.userID === senderID) + 1}`;
-            }
-            
-            return message.reply(leaderboardText);
-        }
-        
-        // ========== TRANSFER COMMAND ==========
-        if (command === "transfer" || command === "send" || command === "pay") {
-            let targetID = Object.keys(mentions)[0] || messageReply?.senderID || args[1];
-            const amountRaw = args.find(a => !isNaN(parseFloat(a)) && parseFloat(a) > 0);
-            const amount = parseFloat(amountRaw);
-            
-            // Validation
-            if (!targetID || isNaN(amount)) {
-                return message.reply(
-                    `💸 Transfer Usage:\n` +
-                    `!balance transfer @user amount\n` +
-                    `Example: !bal transfer @John 1000\n\n` +
-                    `📊 Tax Rates:\n` +
-                    `• ≤ $1,000: 2% tax\n` +
-                    `• ≤ $10,000: 5% tax\n` +
-                    `• ≤ $50,000: 8% tax\n` +
-                    `• ≤ $100,000: 10% tax\n` +
-                    `• ≤ $500,000: 12% tax\n` +
-                    `• > $500,000: 15% tax`
-                );
-            }
-            
-            if (targetID === senderID) {
-                return message.reply("❌ You cannot send money to yourself.");
-            }
-            
-            if (amount < CONFIG.transfer.minAmount) {
-                return message.reply(`❌ Minimum transfer amount is ${formatMoney(CONFIG.transfer.minAmount)}.`);
-            }
-            
-            if (amount > CONFIG.transfer.maxAmount) {
-                return message.reply(`❌ Maximum transfer amount is ${formatMoney(CONFIG.transfer.maxAmount)}.`);
-            }
-            
-            // Get user data
-            const [sender, receiver] = await Promise.all([
-                usersData.get(senderID),
-                usersData.get(targetID)
-            ]);
-            
-            if (!receiver) {
-                return message.reply("❌ Target user not found in database.");
-            }
-            
-            // Calculate tax
-            const taxInfo = calculateTax(amount);
-            
-            // Check if sender has enough money
-            if ((sender.money || 0) < taxInfo.total) {
-                const needed = taxInfo.total - (sender.money || 0);
-                return message.reply(
-                    `❌ Insufficient funds!\n\n` +
-                    `💵 Amount to send: ${formatMoney(amount)}\n` +
-                    `🏛️ Tax (${taxInfo.rate}%): ${formatMoney(taxInfo.tax)}\n` +
-                    `💸 Total needed: ${formatMoney(taxInfo.total)}\n` +
-                    `💰 Your balance: ${formatMoney(sender.money || 0)}\n` +
-                    `📉 Missing: ${formatMoney(needed)}`
-                );
-            }
-            
-            // Execute transfer
-            await Promise.all([
-                usersData.set(senderID, { 
-                    money: (sender.money || 0) - taxInfo.total 
-                }),
-                usersData.set(targetID, { 
-                    money: (receiver.money || 0) + amount 
-                })
-            ]);
-            
-            // Get names
-            const [senderName, receiverName] = await Promise.all([
-                usersData.getName(senderID),
-                usersData.getName(targetID)
-            ]);
-            
-            // Generate transaction ID
-            const transactionID = generateTransactionID();
-            
-            // Send success message
-            const successMessage = `
-✅ TRANSFER COMPLETED! 💸
-━━━━━━━━━━━━━━━━━━━━
-📋 Transaction ID: ${transactionID}
-👤 From: ${senderName}
-🎯 To: ${receiverName}
-━━━━━━━━━━━━━━━━━━━━
-💰 Amount Sent: ${formatMoney(amount)}
-🏛️ Tax Deducted: ${formatMoney(taxInfo.tax)} (${taxInfo.rate}%)
-💸 Total Charged: ${formatMoney(taxInfo.total)}
-━━━━━━━━━━━━━━━━━━━━
-📊 Sender's New Balance: ${formatMoney((sender.money || 0) - taxInfo.total)}
-💳 Receiver's New Balance: ${formatMoney((receiver.money || 0) + amount)}
-━━━━━━━━━━━━━━━━━━━━
-⏰ Time: ${new Date().toLocaleTimeString()}
-✅ Status: Verified & Secured
-            `.trim();
-            
-            return message.reply(successMessage);
-        }
-        
-        // ========== BALANCE CHECK (DEFAULT) ==========
-        let targetID = senderID;
-        if (Object.keys(mentions).length > 0) {
-            targetID = Object.keys(mentions)[0];
-        } else if (messageReply) {
-            targetID = messageReply.senderID;
-        }
-        
-        // Get user data
-        const [userData, allUsers] = await Promise.all([
-            usersData.get(targetID),
-            usersData.getAll()
-        ]);
-        
-        if (!userData) {
-            return message.reply("❌ User not found in database.");
-        }
-        
-        const userName = userData.name || "User";
-        const balance = userData.money || 0;
-        const tierInfo = getTierInfo(balance);
-        
-        // Calculate global rank
-        const sortedUsers = allUsers.sort((a, b) => (b.money || 0) - (a.money || 0));
-        const globalRank = sortedUsers.findIndex(user => user.userID === targetID) + 1;
-        const totalUsers = sortedUsers.length;
-        
-        // Calculate percentile
-        const percentile = ((totalUsers - globalRank) / totalUsers * 100).toFixed(1);
-        
-        // Load avatar
-        let avatarImage = null;
         try {
-            avatarImage = await loadUserAvatar(usersData, targetID);
-        } catch (error) {
-            console.log("Avatar load failed, using fallback");
-        }
-        
-        // ========== CREATE VISUAL CARD ==========
-        const canvas = createCanvas(CONFIG.card.width, CONFIG.card.height);
-        const ctx = canvas.getContext("2d");
-        
-        // 1. Background with gradient
-        const bgGradient = ctx.createLinearGradient(0, 0, CONFIG.card.width, CONFIG.card.height);
-        bgGradient.addColorStop(0, "#0a0a1f");
-        bgGradient.addColorStop(0.5, "#151530");
-        bgGradient.addColorStop(1, "#0f0f23");
-        ctx.fillStyle = bgGradient;
-        ctx.fillRect(0, 0, CONFIG.card.width, CONFIG.card.height);
-        
-        // 2. Subtle pattern
-        ctx.fillStyle = "rgba(255, 255, 255, 0.02)";
-        for (let i = 0; i < 100; i++) {
-            ctx.beginPath();
-            ctx.arc(
-                Math.random() * CONFIG.card.width,
-                Math.random() * CONFIG.card.height,
-                Math.random() * 2 + 0.5,
-                0,
-                Math.PI * 2
-            );
-            ctx.fill();
-        }
-        
-        // 3. Main card container
-        const card = {
-            x: 40,
-            y: 30,
-            width: CONFIG.card.width - 80,
-            height: CONFIG.card.height - 60
-        };
-        
-        // Card background with blur effect
-        ctx.save();
-        createRoundedRect(ctx, card.x, card.y, card.width, card.height, CONFIG.card.borderRadius);
-        ctx.clip();
-        
-        const cardGradient = ctx.createLinearGradient(
-            card.x, card.y,
-            card.x, card.y + card.height
-        );
-        cardGradient.addColorStop(0, "rgba(255, 255, 255, 0.05)");
-        cardGradient.addColorStop(1, "rgba(255, 255, 255, 0.02)");
-        ctx.fillStyle = cardGradient;
-        ctx.fillRect(card.x, card.y, card.width, card.height);
-        ctx.restore();
-        
-        // 4. Card border with glow
-        ctx.strokeStyle = tierInfo.color;
-        ctx.lineWidth = 4;
-        ctx.shadowColor = tierInfo.color;
-        ctx.shadowBlur = CONFIG.card.glowIntensity;
-        createRoundedRect(ctx, card.x, card.y, card.width, card.height, CONFIG.card.borderRadius);
-        ctx.stroke();
-        ctx.shadowBlur = 0;
-        
-        // 5. Header section
-        ctx.fillStyle = "#ffffff";
-        ctx.font = "bold 32px 'Arial'";
-        ctx.textAlign = "left";
-        ctx.fillText("💳 FINANCIAL PASSPORT", card.x + 40, card.y + 50);
-        
-        // 6. Balance display
-        ctx.fillStyle = tierInfo.color;
-        ctx.font = "bold 56px 'Arial'";
-        ctx.textAlign = "center";
-        ctx.shadowColor = tierInfo.color;
-        ctx.shadowBlur = 20;
-        ctx.fillText(formatMoney(balance), card.x + card.width / 2, card.y + 120);
-        ctx.shadowBlur = 0;
-        
-        // 7. User info section
-        const infoX = card.x + 40;
-        const infoY = card.y + 160;
-        
-        // User name
-        ctx.fillStyle = "#ffffff";
-        ctx.font = "bold 24px 'Arial'";
-        ctx.textAlign = "left";
-        ctx.fillText(`👤 ${userName}`, infoX, infoY);
-        
-        // User ID
-        ctx.fillStyle = "#aaaaaa";
-        ctx.font = "16px 'Arial'";
-        ctx.fillText(`🆔 ${targetID}`, infoX, infoY + 30);
-        
-        // Global rank
-        ctx.fillStyle = "#ffaa00";
-        ctx.font = "bold 18px 'Arial'";
-        ctx.fillText(`🏆 Global Rank: #${globalRank} (Top ${percentile}%)`, infoX, infoY + 60);
-        
-        // Tier info
-        ctx.fillStyle = tierInfo.color;
-        ctx.font = "bold 20px 'Arial'";
-        ctx.fillText(`${tierInfo.badge} ${tierInfo.name} Tier`, infoX, infoY + 90);
-        
-        // 8. Progress bar to next tier
-        if (tierInfo.nextTier) {
-            const progressBarX = infoX;
-            const progressBarY = infoY + 100;
-            const progressBarWidth = 300;
-            const progressBarHeight = 20;
-            
-            drawProgressBar(ctx, progressBarX, progressBarY, progressBarWidth, progressBarHeight, 
-                          tierInfo.progress, tierInfo.color);
-            
-            // Next tier info
-            ctx.fillStyle = "#aaaaaa";
-            ctx.font = "14px 'Arial'";
-            ctx.fillText(`Next: ${tierInfo.nextTier.name} (${formatMoney(tierInfo.nextTier.min - balance)} needed)`, 
-                        progressBarX, progressBarY + 100);
-        }
-        
-        // 9. Avatar section
-        const avatarX = card.x + card.width - 180;
-        const avatarY = card.y + 150;
-        const avatarSize = 150;
-        
-        // Avatar background
-        ctx.save();
-        ctx.beginPath();
-        ctx.arc(avatarX + avatarSize/2, avatarY + avatarSize/2, avatarSize/2, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(255, 255, 255, 0.1)";
-        ctx.fill();
-        ctx.strokeStyle = tierInfo.color;
-        ctx.lineWidth = 3;
-        ctx.stroke();
-        ctx.restore();
-        
-        // Draw avatar image
-        if (avatarImage) {
-            ctx.save();
-            ctx.beginPath();
-            ctx.arc(avatarX + avatarSize/2, avatarY + avatarSize/2, avatarSize/2 - 2, 0, Math.PI * 2);
-            ctx.clip();
-            ctx.drawImage(avatarImage, avatarX, avatarY, avatarSize, avatarSize);
-            ctx.restore();
-        } else {
-            // Default avatar
-            ctx.save();
-            ctx.beginPath();
-            ctx.arc(avatarX + avatarSize/2, avatarY + avatarSize/2, avatarSize/2 - 2, 0, Math.PI * 2);
-            ctx.fillStyle = tierInfo.color + "40";
-            ctx.fill();
-            
-            ctx.fillStyle = "#ffffff";
-            ctx.font = "bold 14px 'Arial'";
-            ctx.textAlign = "center";
-            ctx.fillText("AVATAR", avatarX + avatarSize/2, avatarY + avatarSize/2 + 5);
-            ctx.restore();
-        }
-        
-        // 10. Banknote indicators
-        const notesY = card.y + 300;
-        const noteWidth = 80;
-        const noteHeight = 40;
-        const noteSpacing = 20;
-        
-        // Draw banknotes for different denominations
-        const denominations = [1000, 100, 10, 1];
-        let noteX = card.x + 40;
-        
-        for (const denom of denominations) {
-            const noteCount = Math.floor(balance / denom);
-            if (noteCount > 0) {
-                drawBanknote(ctx, noteX, notesY, noteWidth, noteHeight, denom, tierInfo.color);
-                noteX += noteWidth + noteSpacing;
-            }
-        }
-        
-        // 11. Footer
-        ctx.fillStyle = "rgba(255, 255, 255, 0.3)";
-        ctx.font = "12px 'Arial'";
-        ctx.textAlign = "left";
-        ctx.fillText("🏦 Secure Banking System • Encrypted Transactions", 
-                    card.x + 40, card.y + card.height - 20);
-        
-        ctx.textAlign = "right";
-        ctx.fillText("© Fahad Islam", 
-                    card.x + card.width - 40, card.y + card.height - 20);
-        
-        // ========== SAVE AND SEND CARD ==========
-        const tmpDir = path.join(__dirname, "tmp");
-        if (!fs.existsSync(tmpDir)) {
-            fs.mkdirSync(tmpDir, { recursive: true });
-        }
-        
-        const filePath = path.join(tmpDir, `balance_${targetID}_${Date.now()}.png`);
-        
-        try {
-            // Save canvas to file
-            const buffer = canvas.toBuffer("image/png");
-            fs.writeFileSync(filePath, buffer);
-            
-            // Create response message
-            const messageBody = `
-💎 FINANCIAL PROFILE SUMMARY
+            // Handle Transfer
+            if (command === "transfer" || command === "send" || command === "pay") {
+                const targetID = Object.keys(mentions)[0] || messageReply?.senderID;
+                const amount = parseInt(args[args.length - 1]);
 
-👤 Account Holder: ${userName}
-💰 Current Balance: ${formatMoney(balance)}
-🏆 Wealth Tier: ${tierInfo.badge} ${tierInfo.name}
-📊 Global Position: #${globalRank} of ${totalUsers} (Top ${percentile}%)
-🎯 Progress to Next Tier: ${tierInfo.progress.toFixed(1)}%
-
-📈 Stats:
-• Daily Streak: ${userData.dailyStreak || 0} days
-• Tier Multiplier: ${tierInfo.multiplier}x
-• Account Status: ✅ Active
-
-💡 Commands:
-• !balance daily - Claim daily bonus
-• !balance transfer @user amount - Send money
-• !balance top - View leaderboard
-• !balance rank - Check detailed rank
-            `.trim();
-            
-            // Send message with attachment
-            await message.reply({
-                body: messageBody,
-                attachment: fs.createReadStream(filePath)
-            });
-            
-            // Clean up file
-            setTimeout(() => {
-                try {
-                    if (fs.existsSync(filePath)) {
-                        fs.unlinkSync(filePath);
-                    }
-                } catch (cleanupError) {
-                    console.log("Cleanup error:", cleanupError.message);
+                if (!targetID || isNaN(amount) || amount < CONFIG.transfer.minAmount) {
+                    return message.reply(`╭─── 𝐒𝐘𝐒𝐓𝐄𝐌 ───╮\n│ ⚠️ Invalid transfer!\n│ 💰 Min: ${CONFIG.transfer.minAmount}\n╰──────────────╯`);
                 }
-            }, 10000);
-            
+
+                const senderData = await usersData.get(senderID);
+                const taxInfo = calculateTax(amount);
+
+                if (senderData.money < taxInfo.total) {
+                    return message.reply(`╭─── 𝐄𝐑𝐑𝐎𝐑 ───╮\n│ ❌ Insufficient funds\n│ 💸 Need: ${formatMoney(taxInfo.total)}\n╰─────────────╯`);
+                }
+
+                const targetData = await usersData.get(targetID);
+                senderData.money -= taxInfo.total;
+                targetData.money += amount;
+
+                await usersData.set(senderID, senderData);
+                await usersData.set(targetID, targetData);
+
+                const txID = generateTransactionID();
+                return message.reply(`╭─── 𝐓𝐑𝐀𝐍𝐒𝐅𝐄𝐑 ───╮\n│ ✅ Success!\n│ 👤 To: ${mentions[targetID] || "User"}\n│ 💰 Amount: ${formatMoney(amount)}\n│ 📉 Tax: ${formatMoney(taxInfo.tax)} (${taxInfo.rate}%)\n│ 🆔 ID: ${txID}\n╰────────────────╯`);
+            }
+
+            // Handle Daily
+            if (command === "daily" || command === "claim") {
+                const userData = await usersData.get(senderID);
+                const now = Date.now();
+                const lastDaily = userData.lastDaily || 0;
+                const cooldown = 24 * 60 * 60 * 1000;
+
+                if (now - lastDaily < cooldown) {
+                    const remaining = cooldown - (now - lastDaily);
+                    const hours = Math.floor(remaining / (60 * 60 * 1000));
+                    const minutes = Math.floor((remaining % (60 * 60 * 1000)) / (60 * 1000));
+                    return message.reply(`╭─── 𝐃𝐀𝐈𝐋𝐘 ───╮\n│ ⏳ Already claimed!\n│ 🕒 Next in: ${hours}h ${minutes}m\n╰──────────────╯`);
+                }
+
+                const reward = CONFIG.dailyBonus.baseAmount;
+                userData.money += reward;
+                userData.lastDaily = now;
+                await usersData.set(senderID, userData);
+
+                return message.reply(`╭─── 𝐃𝐀𝐈𝐋𝐘 ───╮\n│ 🎁 Bonus Claimed!\n│ 💰 Reward: ${formatMoney(reward)}\n│ ✨ Come back tomorrow!\n╰──────────────╯`);
+            }
+
+            // Default: Show Balance Card
+            const targetID = Object.keys(mentions)[0] || messageReply?.senderID || senderID;
+            const userData = await usersData.get(targetID);
+            const tier = getTierInfo(userData.money);
+
+            const balMsg = `╭─── 𝐁𝐀𝐋𝐀𝐍𝐂𝐄 ───╮\n` +
+                `│ 👤 User: ${userData.name || "User"}\n` +
+                `│ 💰 Money: ${formatMoney(userData.money)}\n` +
+                `│ 🏆 Tier: ${tier.badge} ${tier.name}\n` +
+                `├────────────────╮\n` +
+                `│ 📈 Progress: ${Math.round(tier.progress)}%\n` +
+                `╰────────────────╯`;
+
+            return message.reply(balMsg);
+
         } catch (error) {
-            console.error("Card creation error:", error);
-            
-            // Fallback text response
-            const fallbackMessage = `
-💳 Balance Information
-
-👤 User: ${userName}
-💰 Balance: ${formatMoney(balance)}
-🏆 Tier: ${tierInfo.name} ${tierInfo.badge}
-📊 Global Rank: #${globalRank} of ${totalUsers}
-🎯 Progress: ${tierInfo.progress.toFixed(1)}% to next tier
-
-💡 Use commands:
-• !balance daily - Daily bonus
-• !balance transfer - Send money
-• !balance top - Leaderboard
-            `.trim();
-            
-            await message.reply(fallbackMessage);
-        }
-    },
-    
-    // ========== ON CHAT FUNCTION ==========
-    ncPrefix: async function({ event, message, usersData }) {
-        // You can add auto-bonus or other chat-based features here
-        // Example: Random money drops in chat
-        const randomChance = Math.random();
-        
-        if (randomChance < 0.001) { // 0.1% chance
-            const bonus = Math.floor(Math.random() * 100) + 1;
-            const userID = event.senderID;
-            
-            const userData = await usersData.get(userID);
-            await usersData.set(userID, {
-                money: (userData.money || 0) + bonus
-            });
-            
-            await message.reply(
-                `🎊 LUCKY DROP! 🎊\n` +
-                `You found ${formatMoney(bonus)} on the ground!\n` +
-                `New balance: ${formatMoney((userData.money || 0) + bonus)}`
-            );
+            console.error(error);
+            return message.reply(`╭─── 𝐄𝐑𝐑𝐎𝐑 ───╮\n│ ❌ ${error.message}\n╰─────────────╯`);
         }
     }
 };

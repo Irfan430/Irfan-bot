@@ -52,16 +52,13 @@ module.exports = {
   config: {
     name: "slots",
     aliases: ["slot"],
-    version: "2.1.2",
+    version: "2.2.0",
     author: "NC-xnil6x",
     role: 0,
     category: "game",
     description: "🎰 Ultra Premium Stylish Slot Machine",
     guide: {
-      en:
-        "{pn}slot 500 | 1k | 1m\n" +
-        "{pn}slot info\n" +
-        "{pn}slot top"
+      en: "   {pn} <amount>: Spin the slot\n   {pn} info: View your stats\n   {pn} top: View leaderboard"
     }
   },
 
@@ -88,32 +85,17 @@ module.exports = {
         ? ((todayStats.win / todayStats.play) * 100).toFixed(1)
         : "0";
 
-      const allUsers = await usersData.getAll();
-      const ranking = Object.values(allUsers)
-        .sort((a, b) =>
-          (b.data?.slotsAll?.win || 0) - (a.data?.slotsAll?.win || 0)
-        );
-
-      const rankIndex = ranking.findIndex(u => u.userID === senderID);
-      const globalRank =
-        rankIndex === -1 ? "N/A" : `${rankIndex + 1}/${ranking.length}`;
-
       return message.reply(
-        `╔═══ 📊 𝚂𝙻𝙾𝚃 𝙸𝙽𝙵𝙾 ═══╗\n` +
-        `║ 👤 𝚄𝚜𝚎𝚛: ${user.name || "Unknown"}\n` +
-        `║ 👑 𝙿𝚛𝚎𝚖𝚒𝚞𝚖: ${isPremium ? "YES" : "NO"}\n` +
-        `║ 🎯 𝙳𝚊𝚒𝚕𝚢 𝙻𝚒𝚖𝚒𝚝: ${dl}\n` +
-        `╠══════ 𝚃𝙾𝙳𝙰𝚈 ══════╣\n` +
-        `║ 🎰 𝙿𝚕𝚊𝚢𝚎𝚍 : ${todayStats.play}\n` +
-        `║ 🎉 𝚆𝚒𝚗 𝙱𝚎𝚝 : ${todayStats.win}\n` +
-        `║ 😢 𝙻𝚘𝚜𝚝 𝙱𝚎𝚝: ${todayStats.lose}\n` +
-        `║ 📈 𝚆𝚒𝚗 𝚁𝚊𝚝𝚎: ${rate}%\n` +
-        `║ 💰 𝚆𝚒𝚗 𝙼𝚘𝚗𝚎𝚢: ${fm(todayStats.winMoney)}\n` +
-        `╠════ 𝙰𝙻𝙻 𝚃𝙸𝙼𝙴 ════╣\n` +
-        `║ 🎰 𝚃𝚘𝚝𝚊𝚕 𝙿𝚕𝚊𝚢: ${allStats.play}\n` +
-        `║ 🏆 𝚃𝚘𝚝𝚊𝚕 𝚆𝚒𝚗 : ${allStats.win}\n` +
-        `║ 🌍 𝙶𝚕𝚘𝚋𝚊𝚕 𝚁𝚊𝚗𝚔: ${globalRank}\n` +
-        `╚══════════════════╝`
+        `╭─── 𝐒𝐋𝐎𝐓 𝐈𝐍𝐅𝐎 ───╮\n` +
+        `│ 👤 User: ${user.name || "User"}\n` +
+        `│ 👑 Premium: ${isPremium ? "✅" : "❌"}\n` +
+        `│ 🎯 Limit: ${dl}\n` +
+        `├────── 𝐓𝐎𝐃𝐀𝐘 ──────╮\n` +
+        `│ 🎰 Played: ${todayStats.play}\n` +
+        `│ 🎉 Wins: ${todayStats.win}\n` +
+        `│ 📈 Rate: ${rate}%\n` +
+        `│ 💰 Profit: ${fm(todayStats.winMoney)}\n` +
+        `╰──────────────────╯`
       );
     }
 
@@ -126,29 +108,29 @@ module.exports = {
           win: u.data?.slotsAll?.win || 0
         }))
         .sort((a, b) => b.win - a.win)
-        .slice(0, 10);
+        .slice(0, 5);
 
-      return message.reply(
-        `🏆 SLOT TOP 10 (ALL TIME)\n\n` +
-        top.map((u, i) =>
-          `🥇 #${i + 1}\n👤 ${u.name}\n🏆 Wins: ${u.win}`
-        ).join("\n\n")
-      );
+      let msg = `╭─── 𝐒𝐋𝐎𝐓 𝐓𝐎𝐏 ───╮\n`;
+      top.forEach((u, i) => {
+        msg += `│ #${i + 1} ${u.name}: ${u.win} 🏆\n`;
+      });
+      msg += `╰────────────────╯`;
+      return message.reply(msg);
     }
 
     /* ===== BET ===== */
     const bet = parseBet(args[0]);
     if (!bet || isNaN(bet))
-      return message.reply("❌ Invalid bet amount!");
+      return message.reply("╭─── 𝐒𝐘𝐒𝐓𝐄𝐌 ───╮\n│ ⚠️ Invalid bet amount\n╰──────────────╯");
 
     if (bet > mbet)
-      return message.reply(`🚫 Max Bet Allowed: ${fm(mbet)}`);
+      return message.reply(`╭─── 𝐒𝐘𝐒𝐓𝐄𝐌 ───╮\n│ 🚫 Max Bet: ${fm(mbet)}\n╰──────────────╯`);
 
     if (todayStats.play >= dl)
-      return message.reply(`⛔ Daily limit reached (${dl})`);
+      return message.reply(`╭─── 𝐒𝐘𝐒𝐓𝐄𝐌 ───╮\n│ ⛔ Daily limit reached\n╰──────────────╯`);
 
     if (user.money < bet)
-      return message.reply(`💸 Need ${fm(bet - user.money)} more!`);
+      return message.reply(`╭─── 𝐄𝐑𝐑𝐎𝐑 ───╮\n│ 💸 Need ${fm(bet - user.money)} more\n╰─────────────╯`);
 
     /* ===== SPIN ===== */
     const s1 = roll();
@@ -156,17 +138,17 @@ module.exports = {
     const s3 = roll();
 
     let win = -bet;
-    let title = "☠️ LOSS";
+    let title = "☠️ 𝐋𝐎𝐒𝐒";
 
     if (s1 === s2 && s2 === s3 && s1 === "7️⃣") {
       win = bet * 10;
-      title = "🔥 MEGA JACKPOT";
+      title = "🔥 𝐌𝐄𝐆𝐀 𝐉𝐀𝐂𝐊𝐏𝐎𝐓";
     } else if (s1 === s2 && s2 === s3) {
       win = bet * 5;
-      title = "💎 BIG WIN";
+      title = "💎 𝐁𝐈𝐆 𝐖𝐈𝐍";
     } else if (s1 === s2 || s2 === s3 || s1 === s3) {
       win = bet * 2;
-      title = "✨ WIN";
+      title = "✨ 𝐖𝐈𝐍";
     }
 
     /* ===== UPDATE ===== */
@@ -190,14 +172,14 @@ module.exports = {
     });
 
     return message.reply(
-      `🎰 𝚂𝙻𝙾𝚃 𝙼𝙰𝙲𝙷𝙸𝙽𝙴\n\n` +
-      `╭─────────────╮\n` +
-      `│ ${s1} │ ${s2} │ ${s3} │\n` +
-      `╰─────────────╯\n\n` +
-      `${title}\n` +
-      `${win > 0 ? `💰 +${fm(win)}` : `💸 -${fm(bet)}`}\n\n` +
-      `💳 𝙱𝚊𝚕𝚊𝚗𝚌𝚎: ${fm(newBalance)}\n` +
-      `🎯 𝚃𝚘𝚍𝚊𝚢: ${todayStats.play}/${dl}`
+      `╭─── 𝐒𝐋𝐎𝐓 𝐌𝐀𝐂𝐇𝐈𝐍𝐄 ───╮\n` +
+      `│  🎰  ${s1}  │  ${s2}  │  ${s3}  🎰  \n` +
+      `├─────────────────────╮\n` +
+      `│ 📢 Result: ${title}\n` +
+      `│ 💰 ${win > 0 ? "+" : "-"}${fm(Math.abs(win))}\n` +
+      `│ 💳 Balance: ${fm(newBalance)}\n` +
+      `│ 🎯 Today: ${todayStats.play}/${dl}\n` +
+      `╰─────────────────────╯`
     );
   }
 };
