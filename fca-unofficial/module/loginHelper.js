@@ -1267,6 +1267,8 @@ function loginHelper(appState, Cookie, email, password, globalOptions, callback)
         });
         logger(`Loaded ${loaded} FCA API methods${skipped ? `, skipped ${skipped} duplicates` : ""}`);
         if (api.listenMqtt) api.listen = api.listenMqtt;
+        api.createStory = require("../src/api/messaging/createStory")(defaultFuncs, api, ctxMain);
+        api.getStories = require("../src/api/messaging/getStories")(defaultFuncs, api, ctxMain);
         if (api.refreshFb_dtsg) {
           setInterval(function () {
             api.refreshFb_dtsg().then(function () {
