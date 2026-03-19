@@ -73,7 +73,17 @@ module.exports = {
         await api.sendMessage({
           body: welcomeMsg,
           attachment: fs.createReadStream(imagePath),
-          mentions: [{ tag: fullName, id: userId }]
+          mentions: [{ tag: fullName, id: userId }],
+          buttons: [
+            {
+              title: "Profile",
+              url: `https://www.facebook.com/profile.php?id=${userId}`
+            },
+            {
+              title: "Message",
+              url: `https://m.me/${userId}`
+            }
+          ]
         }, threadID);
 
         fs.unlinkSync(imagePath);
