@@ -338,6 +338,7 @@ function message(api, event) {
                 send: async (form, callback) => {
                         try {
                                 global.statusAccountBot = 'good';
+                                if (api.sendTypingIndicator) await api.sendTypingIndicator(event.threadID);
                                 return await api.sendMessage(form, event.threadID, callback);
                         }
                         catch (err) {
@@ -350,6 +351,8 @@ function message(api, event) {
                 reply: async (form, callback) => {
                         try {
                                 global.statusAccountBot = 'good';
+                                if (api.sendTypingIndicator) await api.sendTypingIndicator(event.threadID);
+                                if (api.markAsRead) await api.markAsRead(event.threadID);
                                 return await api.sendMessage(form, event.threadID, callback, event.messageID);
                         }
                         catch (err) {
