@@ -20,7 +20,7 @@ module.exports = {
     try {
       if (!args[0]) {
         return api.sendMessage(
-          "⛔ 𝐏𝐥𝐞𝐚𝐬𝐞 𝐩𝐫𝐨𝐯𝐢𝐝𝐞 𝐚 𝐆𝐢𝐭𝐇𝐮𝐛 𝐮𝐬𝐞𝐫𝐧𝐚𝐦𝐞.",
+          "╭──── 𝐄𝐑𝐑𝐎𝐑 ────╮\n│ ❌ Please provide a GitHub\n│    username to search.\n│ 💡 Usage: github <username>\n╰──────────────────╯",
           event.threadID,
           event.messageID
         );
@@ -34,27 +34,27 @@ module.exports = {
 
       if (!data) {
         return api.sendMessage(
-          `❌ 𝐍𝐨 𝐆𝐢𝐭𝐇𝐮𝐛 𝐮𝐬𝐞𝐫 𝐟𝐨𝐮𝐧𝐝 𝐟𝐨𝐫 𝐮𝐬𝐞𝐫𝐧𝐚𝐦𝐞: ${username}`,
+          `╭──── 𝐄𝐑𝐑𝐎𝐑 ────╮\n│ ❌ No GitHub user found\n│    for: ${username}\n╰──────────────────╯`,
           event.threadID,
           event.messageID
         );
       }
-      
-      const replyText = `╭─╼━━━━━━━━━━━━╾─╮
-│  🐙  ${"ＧＩＴＨＵＢ  ＰＲＯＦＩＬＥ"}  │
-├─╼━━━━━━━━━━━━╾─╯
-│ 🧑‍💻 Name: ${data.name || "None"}
-│ 👤 User: ${data.user || "None"}
-│ 🏢 Company: ${data.company || "None"}
-│ 🌐 Blog: ${data.blog || "None"}
-│ 📍 Location: ${data.location || "None"}
-│ 📧 Email: ${data.email || "None"}
-│ 📝 Bio: ${data.bio || "None"}
-│ 📦 Repos: ${data.public_repos || 0}
-│ 👥 Followers: ${data.followers || 0}
-│ 👣 Following: ${data.following || 0}
-│ 📆 Created: ${new Date(data.created_at).toDateString()}
-╰─╼━━━━━━━━━━━━╾─╯`;
+
+      const replyText =
+        `╭──── 🐙 𝗚𝗜𝗧𝗛𝗨𝗕 𝗣𝗥𝗢𝗙𝗜𝗟𝗘 ────╮\n` +
+        `│ 🧑‍💻 𝗡𝗮𝗺𝗲     : ${data.name || "None"}\n` +
+        `│ 👤 𝗨𝘀𝗲𝗿     : ${data.user || "None"}\n` +
+        `│ 🏢 𝗖𝗼𝗺𝗽𝗮𝗻𝘆  : ${data.company || "None"}\n` +
+        `│ 🌐 𝗕𝗹𝗼𝗴     : ${data.blog || "None"}\n` +
+        `│ 📍 𝗟𝗼𝗰𝗮𝘁𝗶𝗼𝗻 : ${data.location || "None"}\n` +
+        `│ 📧 𝗘𝗺𝗮𝗶𝗹    : ${data.email || "None"}\n` +
+        `│ 📝 𝗕𝗶𝗼      : ${data.bio || "None"}\n` +
+        `├─────────────────────────╮\n` +
+        `│ 📦 𝗥𝗲𝗽𝗼𝘀    : ${data.public_repos || 0}\n` +
+        `│ 👥 𝗙𝗼𝗹𝗹𝗼𝘄𝗲𝗿𝘀 : ${data.followers || 0}\n` +
+        `│ 👣 𝗙𝗼𝗹𝗹𝗼𝘄𝗶𝗻𝗴 : ${data.following || 0}\n` +
+        `│ 📆 𝗝𝗼𝗶𝗻𝗲𝗱   : ${new Date(data.created_at).toDateString()}\n` +
+        `╰─────────────────────────╯`;
 
       await api.sendMessage(
         {
@@ -68,7 +68,7 @@ module.exports = {
     } catch (err) {
       console.error("[GITHUB CMD ERROR]", err);
       return api.sendMessage(
-        "❌ 𝐅𝐚𝐢𝐥𝐞𝐝 𝐭𝐨 𝐠𝐞𝐭 𝐆𝐢𝐭𝐇𝐮𝐛 𝐮𝐬𝐞𝐫 𝐢𝐧𝐟𝐨.",
+        "╭──── 𝐄𝐑𝐑𝐎𝐑 ────╮\n│ ❌ Failed to get GitHub\n│    user information.\n╰──────────────────╯",
         event.threadID,
         event.messageID
       );

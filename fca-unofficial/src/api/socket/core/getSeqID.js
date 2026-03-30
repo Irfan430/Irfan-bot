@@ -210,7 +210,7 @@ async function tryAutoLogin(logger, config, ctx, defaultFuncs) {
           logger(`getSeqID: web session refresh failed - ${refreshErr && refreshErr.message ? refreshErr.message : String(refreshErr)}`, "warn");
         }
 
-        return { ...result, cookies };
+        return { ...result, cookiePairs };
       }
     }
 

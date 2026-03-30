@@ -4,16 +4,16 @@ module.exports = {
   config: {
     name: "userinfo",
     aliases: ["info", "profile"],
-    version: "1.0.0",
+    version: "1.1.0",
     author: "Manus",
     countDown: 5,
     role: 0,
-    description: "Get detailed information about a Facebook user.",
+    shortDescription: { en: "Get detailed information about a Facebook user." },
     category: "info",
-    guide: "{pn} [user ID or reply to message]"
+    guide: { en: "{pn} [user ID or reply to message]" }
   },
 
-  onStart: async function ({ api, event, args, message }) {
+  ncStart: async function ({ api, event, args, message }) {
     let targetID = event.senderID;
 
     if (args[0]) {
@@ -23,40 +23,54 @@ module.exports = {
     }
 
     if (!targetID) {
-      return message.reply("╭─── 𝐄𝐑𝐑𝐎𝐑 ───╮\n│ Please provide a user ID or reply to a message.\n╰────── ──────╯");
+      return message.reply(
+        "╭──── 𝐄𝐑𝐑𝐎𝐑 ────╮\n│ ❌ Please provide a user ID\n│    or reply to a message.\n╰──────────────────╯"
+      );
     }
 
-    message.reply("╭─── 𝐒𝐘𝐒𝐓𝐄𝐌 ───╮\n│ Fetching user information, please wait...\n╰────── ──────╯");
+    message.reply("╭──── 🔍 𝐒𝐘𝐒𝐓𝐄𝐌 ────╮\n│ ⏳ Fetching user info...\n╰───────────────────╯");
 
     try {
       if (!api.getUserInfoV2) {
-        throw new Error("API getUserInfoV2 is not available in your FCA.");
+        throw new Error("getUserInfoV2 not available in this FCA version.");
       }
 
       api.getUserInfoV2(targetID, (err, data) => {
         if (err) {
-          return message.reply(`╭─── 𝐄𝐑𝐑𝐎𝐑 ───╮\n│ Failed to fetch user info: ${err.error || err}\n╰────── ──────╯`);
+          return message.reply(
+            `╭──── 𝐄𝐑𝐑𝐎𝐑 ────╮\n│ ❌ Failed to fetch user info\n│ ⚠️  ${err.error || err.message || err}\n╰──────────────────╯`
+          );
         }
 
         const userInfo = data[targetID];
 
         if (!userInfo || !userInfo.name) {
-          return message.reply("╭─── 𝐄𝐑𝐑𝐎𝐑 ───╮\n│ User not found or no information available.\n╰────── ──────╯");
+          return message.reply(
+            "╭──── 𝐄𝐑𝐑𝐎𝐑 ────╮\n│ ❌ User not found or\n│    no information available.\n╰──────────────────╯"
+          );
         }
 
-        const responseMessage = `╭─── 𝐔𝐒𝐄𝐑 𝐈𝐍𝐅𝐎 ───╮\n` +
-          `│ 𝐍𝐚𝐦𝐞: ${userInfo.name}\n` +
-          `│ 𝐅𝐢𝐫𝐬𝐭 𝐍𝐚𝐦𝐞: ${userInfo.firstName || "N/A"}\n` +
-          `│ 𝐔𝐬𝐞𝐫𝐧𝐚𝐦𝐞: ${userInfo.vanity || "N/A"}\n` +
-          `│ 𝐆𝐞𝐧𝐝𝐞𝐫: ${userInfo.gender || "N/A"}\n` +
-          `│ 𝐅𝐫𝐢𝐞𝐧𝐝𝐬𝐡𝐢𝐩: ${userInfo.friendshipStatus || "N/A"}\n` +
-          `│ 𝐏𝐫𝐨𝐟𝐢𝐥𝐞 𝐔𝐑𝐋: ${userInfo.profileUrl || "N/A"}\n` +
-          `╰────── ───────╯`;
+        const genderMap = { MALE: "♂ Male", FEMALE: "♀ Female" };
+        const friendMap = { ARE_FRIENDS: "✅ Friends", NOT_FRIENDS: "➖ Not Friends" };
+
+        const responseMessage =
+          `╭──── 👤 𝐔𝐒𝐄𝐑 𝐈𝐍𝐅𝐎 ────╮\n` +
+          `│ 🏷️  𝗡𝗮𝗺𝗲     : ${userInfo.name}\n` +
+          `│ 📛 𝗙𝗶𝗿𝘀𝘁    : ${userInfo.firstName || "N/A"}\n` +
+          `│ 🔗 𝗨𝘀𝗲𝗿𝗻𝗮𝗺𝗲 : ${userInfo.vanity || "N/A"}\n` +
+          `│ ⚧️  𝗚𝗲𝗻𝗱𝗲𝗿   : ${genderMap[userInfo.gender] || userInfo.gender || "N/A"}\n` +
+          `│ 🤝 𝗙𝗿𝗶𝗲𝗻𝗱   : ${friendMap[userInfo.friendshipStatus] || userInfo.friendshipStatus || "N/A"}\n` +
+          `│ 🆔 𝗜𝗗       : ${targetID}\n` +
+          `├─────────────────────╮\n` +
+          `│ 🌐 ${userInfo.profileUrl || "N/A"}\n` +
+          `╰─────────────────────╯`;
 
         message.reply(responseMessage);
       });
     } catch (error) {
-      message.reply(`╭─── 𝐄𝐑𝐑𝐎𝐑 ───╮\n│ An unexpected error occurred:\n│ ${error.message}\n╰────── ──────╯`);
+      message.reply(
+        `╭──── 𝐄𝐑𝐑𝐎𝐑 ────╮\n│ ❌ Unexpected error:\n│ ⚠️  ${error.message}\n╰──────────────────╯`
+      );
     }
   }
 };

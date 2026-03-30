@@ -37,8 +37,8 @@ module.exports = {
       }
       if (count > 50) count = 50;
 
-      const apiUrl = "https://raw.githubusercontent.com/Saim-x69x/sakura/main/ApiUrl.json";
-      const rawRes = await axios.get(apiUrl);
+      const rawApiUrl = "https://raw.githubusercontent.com/Saim-x69x/sakura/main/ApiUrl.json";
+      const rawRes = await axios.get(rawApiUrl);
       const apiBase = rawRes.data.saimx69x;
 
       const apiUrl = `${apiBase}/api/anime?title=${encodeURIComponent(input)}`;

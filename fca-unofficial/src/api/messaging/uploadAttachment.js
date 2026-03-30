@@ -16,7 +16,7 @@ let tokenCache = null;
 let tokenCacheTime = 0;
 const TOKEN_CACHE_TTL = 5 * 60 * 1000;
 
-const DEFAULT_UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36";
+const DEFAULT_UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36";
 
 function cleanJSON(x) {
   if (typeof x !== "string") return x;
@@ -76,8 +76,8 @@ async function httpGet(pageUrl, ua, headers = {}) {
     Origin: `https://${host}`,
     Referer: referer,
     "Sec-Ch-Prefers-Color-Scheme": "dark",
-    "Sec-Ch-Ua": '"Google Chrome";v="143", "Chromium";v="143", "Not A(Brand";v="24"',
-    "Sec-Ch-Ua-Full-Version-List": '"Google Chrome";v="143.0.7499.182", "Chromium";v="143.0.7499.182", "Not A(Brand";v="24.0.0.0"',
+    "Sec-Ch-Ua": '"Chromium";v="136", "Google Chrome";v="136", "Not.A/Brand";v="99"',
+    "Sec-Ch-Ua-Full-Version-List": '"Chromium";v="136.0.7103.113", "Google Chrome";v="136.0.7103.113", "Not.A/Brand";v="99.0.0.0"',
     "Sec-Ch-Ua-Mobile": "?0",
     "Sec-Ch-Ua-Model": '""',
     "Sec-Ch-Ua-Platform": '"Windows"',
@@ -295,7 +295,7 @@ async function singleUpload(urlBase, file, ua, tokens, retries = 2) {
       application_tags: "graphservice"
     }),
     "sec-ch-prefers-color-scheme": "dark",
-    "sec-ch-ua": '"Google Chrome";v="143", "Chromium";v="143", "Not A(Brand";v="24"',
+    "sec-ch-ua": '"Chromium";v="136", "Google Chrome";v="136", "Not.A/Brand";v="99"',
     "sec-ch-ua-mobile": "?0",
     "sec-ch-ua-platform": '"Windows"',
     "sec-fetch-dest": "empty",
